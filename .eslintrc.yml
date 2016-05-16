@@ -1,0 +1,27 @@
+---
+  env:
+    es6: true
+    node: true
+    mocha: true
+    mongo: true
+
+  parser: "esprima"
+
+  parserOptions:
+    ecmaVersion: 6
+    sourceType: "module"
+    ecmaFeatures:
+      jsx: false
+
+  rules:
+    indent: [1, 2]
+    semi: [1, "never"]
+
+    strict: [1, "safe"]
+
+    # Best practice
+    curly: [2,  "multi-line"]
+    eqeqeq: [1, "smart"]
+    no-loop-func: 2
+    no-alert: 2
+    yoda: [2, "never"]
