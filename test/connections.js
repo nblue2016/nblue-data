@@ -2,7 +2,7 @@ const assert = require('assert')
 const core = require('nblue-core')
 const data = require('../lib')
 
-const MongoDBConnections = data.MongoDBConnections
+const MongoDbConnections = data.MongoDbConnections
 const TIMTOUT_VALUE = 5000
 
 describe("connections", function () {
@@ -11,7 +11,7 @@ describe("connections", function () {
 
     this.timeout(TIMTOUT_VALUE)
 
-    const conns = new MongoDBConnections()
+    const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -23,7 +23,7 @@ describe("connections", function () {
 
     this.timeout(TIMTOUT_VALUE)
 
-    const conns = new MongoDBConnections()
+    const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -35,7 +35,7 @@ describe("connections", function () {
 
     this.timeout(TIMTOUT_VALUE)
 
-    const conns = new MongoDBConnections()
+    const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -47,7 +47,7 @@ describe("connections", function () {
 
     this.timeout(TIMTOUT_VALUE)
 
-    const conns = new MongoDBConnections()
+    const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -59,7 +59,7 @@ describe("connections", function () {
 
     this.timeout(TIMTOUT_VALUE * 3)
 
-    const conns = new MongoDBConnections()
+    const conns = new MongoDbConnections()
 
     const opened = []
 
