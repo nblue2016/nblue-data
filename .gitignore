@@ -1,2 +1,5 @@
+*.log
+*.debug.*
+*.release.*
 node_modules
 node_modules/*.*
