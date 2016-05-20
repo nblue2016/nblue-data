@@ -8,7 +8,7 @@ const cache = data.SchemaCache.create()
 
 // console.log(cache)
 
-let file = undefined
+let file = null
 
 file = path.join(__dirname, './schemas/blog.json')
 cache.add(file)
@@ -17,6 +17,7 @@ file = path.join(__dirname, './schemas/blog._js')
 cache.add(file)
 
 const schemas = cache.getSchemas('mongo')
+
 if (schemas.has('post')) {
   console.log(schemas.get('post'))
 }

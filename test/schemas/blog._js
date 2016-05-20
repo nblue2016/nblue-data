@@ -1,3 +1,4 @@
+// data struct definition
 {
   "database":
   {

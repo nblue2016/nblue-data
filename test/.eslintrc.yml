@@ -1,0 +1,8 @@
+---
+  rules:
+    # disable some rules for test
+    no-console: 0
+    no-magic-numbers: 0
+    no-unused-vars: [2, { args: "none", caughtErrors: "none" }]
+
+    global-require: 0

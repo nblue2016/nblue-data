@@ -1,89 +1,94 @@
-const assert = require('assert')
-const core = require('nblue-core')
+// const assert = require('assert')
+require('../lib')
 const data = require('../lib')
 
+
 const MongoDbConnections = data.MongoDbConnections
-const TIMTOUT_VALUE = 5000
+const timeoutValue = 5000
 
-describe("connections", function () {
+const config = global.config
 
+describe('connections', () => {
   it('Test connection string1', function (done) {
-
-    this.timeout(TIMTOUT_VALUE)
+    this.timeout(timeoutValue)
 
     const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
-    conns.on('error', (err, conn) => {done(err)})
+    conns.on('error', (err, conn) => done(err))
     conns.createByConfig('conn1', config)
   })
 
   it('Test connection string1 again', function (done) {
-
-    this.timeout(TIMTOUT_VALUE)
+    this.timeout(timeoutValue)
 
     const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
-    conns.on('error', (err, conn) => {done(err)})
+    conns.on('error', (err, conn) => done(err))
     conns.createByConfig('conn1', config)
   })
 
   it('Test connection string4', function (done) {
-
-    this.timeout(TIMTOUT_VALUE)
+    this.timeout(timeoutValue)
 
     const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
-    conns.on('error', (err, conn) => {done(err)})
+    conns.on('error', (err, conn) => done(err))
     conns.createByConfig('conn4', config)
   })
 
   it('Test connection string5, auth failed', function (done) {
-
-    this.timeout(TIMTOUT_VALUE)
+    this.timeout(timeoutValue)
 
     const conns = new MongoDbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
-    conns.on('error', (err, conn) => done((err.code === 18) ? undefined : err))
+    conns.on('error', (err, conn) => done(err.code === 18 ? null : err))
     conns.createByConfig('conn5', config)
   })
 
   it('Test all connections', function (done) {
-
-    this.timeout(TIMTOUT_VALUE * 3)
+    this.timeout(timeoutValue * 3)
 
     const conns = new MongoDbConnections()
 
     const opened = []
 
     conns.on('open', (conn) => {
-
       if (!['conn1', 'conn4'].includes(conn.Name)) {
+        const errMessage =
+          String.format('Unexpected connection: %s was opened.', conn.Name)
 
-        done(new Error(String.format('Unexpected connection: %s was opened.', conn.Name)))
+        done(new Error(errMessage))
+
         return
       }
 
       opened.push(conn)
       conns.close(conn.Name)
     })
-    conns.on('close', (conn) => { if (opened.length === 2) done() })
-    conns.on('error', (err, conn) => { if (err.code !== 18) done(err) })
+
+    conns.on('close', (conn) => {
+      if (opened.length === 2) done()
+    })
+    conns.on('error', (err, conn) => {
+      if (err.code !== 18) done(err)
+    })
 
     const createConn = (name) => conns.createByConfig(name, config)
 
     // create every connection defined in configuration file
-    for(let connections of config.get('connections') || new Map()) {
-      for(let name of connections.keys()) {
-
-        setTimeout(() => {createConn(name)}, 100)
+    for (const connections of config.get('connections') || new Map()) {
+      for (const name of connections.keys()) {
+        setTimeout(() => {
+          createConn(name)
+        }, 100)
       }
     }
   })
