@@ -24,8 +24,8 @@
   },
   "homepage": "https://github.com/nblue2016/nblue-data#readme",
   "dependencies": {
-    "mongoose": "^4.4.17",
-    "nblue-core": "0.0.4"
+    "nblue-core": "^0.0.4",
+    "mongoose": "^4.4.17"
   },
   "devDependencies": {
     "eslint": "^2.10.1",
