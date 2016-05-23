@@ -3,10 +3,11 @@ const ConfigMap = global.ConfigMap
 
 const testScripts = [
   './connections',
-  '#./schema'
+  './schema'
 ]
 
-const config = ConfigMap.parseConfig(String.format('%s/config.yml', __dirname))
+const config = ConfigMap.
+  parseConfigSync(String.format('%s/config.yml', __dirname))
 
 if (!global.config) global.config = config
 

@@ -1,4 +1,3 @@
-// const assert = require('assert')
 require('../lib')
 const data = require('../lib')
 

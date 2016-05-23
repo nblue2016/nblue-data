@@ -1,6 +1,7 @@
 ---
   rules:
     # disable some rules for test
+    max-statements: [2, 50]
     no-console: 0
     no-magic-numbers: 0
     no-unused-vars: [2, { args: "none", caughtErrors: "none" }]
