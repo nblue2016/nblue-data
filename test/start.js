@@ -1,4 +1,5 @@
 require('nblue-core')
+
 const ConfigMap = global.ConfigMap
 
 const testScripts = [
@@ -6,8 +7,9 @@ const testScripts = [
   './schema'
 ]
 
+const configFile = String.format('%s/config.yml', __dirname)
 const config = ConfigMap.
-  parseConfigSync(String.format('%s/config.yml', __dirname))
+  parseConfigSync(configFile, ['dev', 'debug'])
 
 if (!global.config) global.config = config
 

@@ -1,9 +1,8 @@
-require('../lib')
 const data = require('../lib')
 
 
 const MongoDbConnections = data.MongoDbConnections
-const timeoutValue = 5000
+const timeoutValue = 15000
 
 const config = global.config
 
@@ -80,15 +79,6 @@ describe('connections', () => {
       if (err.code !== 18) done(err)
     })
 
-    const createConn = (name) => conns.createByConfig(name, config)
-
-    // create every connection defined in configuration file
-    for (const connections of config.get('connections') || new Map()) {
-      for (const name of connections.keys()) {
-        setTimeout(() => {
-          createConn(name)
-        }, 100)
-      }
-    }
+    conns.createByConfigs(config)
   })
 })

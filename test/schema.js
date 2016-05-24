@@ -1,4 +1,3 @@
-require('../lib')
 const assert = require('assert')
 const path = require('path')
 const data = require('../lib')
