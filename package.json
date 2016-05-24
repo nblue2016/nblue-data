@@ -23,9 +23,12 @@
     "url": "https://github.com/nblue2016/nblue-data/issues"
   },
   "homepage": "https://github.com/nblue2016/nblue-data#readme",
+  "files": [
+    "lib/"
+  ],
   "dependencies": {
     "mongoose": "^4.4.17",
-    "nblue-core": "^0.0.6"
+    "nblue-core": "^0.0.8"
   },
   "devDependencies": {
     "eslint": "^2.10.1",
