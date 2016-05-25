@@ -1,6 +1,6 @@
 {
   "name": "nblue-data",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "data module",
   "main": "index.js",
   "directories": {
@@ -24,11 +24,12 @@
   },
   "homepage": "https://github.com/nblue2016/nblue-data#readme",
   "files": [
+    "",
     "lib/"
   ],
   "dependencies": {
     "mongoose": "^4.4.17",
-    "nblue-core": "^0.0.8"
+    "nblue-core": "0.0.25"
   },
   "devDependencies": {
     "eslint": "^2.10.1",
