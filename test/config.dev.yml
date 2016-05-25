@@ -5,4 +5,4 @@ connections:
   - conn2: "mongodb://nblue:password@ds021671.mlab.com:21671/nblue?authDb=nblue"
   - conn3: "mongodb://nblue:password@ds021671.mlab.com:21671/nblue?authDb=nblue"
   - conn4: "mongodb://nblue2016:password@ds021731.mlab.com:21731/nblue?authDb=nblue"
-  - conn5: "mongodb://nblue:password@ds021731.mlab.com:21731/nblue?authDb=nblue"
+  - conn5: "mongodb://nblue:incorrectPassword@ds021731.mlab.com:21731/nblue?authDb=nblue"

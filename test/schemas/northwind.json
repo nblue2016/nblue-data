@@ -1,6 +1,6 @@
 {
   "database": {
-    "default": "test2"
+    "default": "conn2"
   },
   "entity": {
     "category": {

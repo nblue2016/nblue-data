@@ -1,25 +1,16 @@
 const assert = require('assert')
-const path = require('path')
-const data = require('../lib')
 
-const cache = data.SchemaCache.create()
+const schemas = global.schemas
 
-let file = null
-
-file = path.join(__dirname, './schemas/blog.json')
-cache.add(file)
-
-file = path.join(__dirname, './schemas/blog._js')
-cache.add(file)
-
-const schemas = cache.getSchemas('mongo')
 
 describe('schemas', () => {
   it('Loadded objects', () => {
     const keys = Object.keys(schemas.toObject())
 
-    assert.equal(keys.length, 3, 'then length of loaded objects.')
-    assert.deepEqual(keys, ['post', 'user', 'team'], 'loadded 3 objects')
+    assert.equal(keys.length, 5, 'then length of loaded objects.')
+    assert.deepEqual(keys,
+      ['post', 'user', 'team', 'category', 'customer'],
+      'loadded 5 objects')
   })
 
   it('Post object', () => {
@@ -29,7 +20,7 @@ describe('schemas', () => {
 
     const database = post.database
 
-    assert.equal(database, 'test1', 'found property of database')
+    assert.equal(database, 'conn1', 'found property of database')
 
     const model = post.model
     const mapped = Object.toMap(model, true)
@@ -70,7 +61,7 @@ describe('schemas', () => {
 
     const database = user.database
 
-    assert.equal(database, 'test1', 'found property of database')
+    assert.equal(database, 'conn1', 'found property of database')
 
     const model = user.model
     const mapped = Object.toMap(model, true)
@@ -86,7 +77,7 @@ describe('schemas', () => {
 
     const database = team.database
 
-    assert.equal(database, 'test1', 'found property of database')
+    assert.equal(database, 'conn1', 'found property of database')
 
     const model = team.model
     const mapped = Object.toMap(model, true)

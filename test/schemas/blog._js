@@ -1,6 +1,6 @@
 {
   database: {
-    default: "test1"
+    default: "conn1"
   },
   entity: {
     post: {
