@@ -4,14 +4,14 @@ const dataLib = require('../lib')
 const aq = global.aq
 const config = global.config
 const MongoDbConnections = dataLib.MongoDbConnections
-const MongoDbAdapter = dataLib.MongoDbAdapter
+// const MongoDbAdapter = dataLib.MongoDbAdapter
 
 const timeOutValue = 5000
 const opened = []
 const insertedPosts = []
 
 const conns = new MongoDbConnections()
-const dbAdapter = new MongoDbAdapter(conns)
+const postAdapter = conns.createAdapter('post')
 
 before(function (done) {
   this.timeout(20000)
@@ -40,13 +40,12 @@ describe('adapter test', () => {
   })
 })
 
-describe('adapter operate entity', () => {
+describe('post adapter operate entity', () => {
   it('create entity with callback', function (done) {
     this.timeout(timeOutValue)
 
-    dbAdapter.create(
-          'post',
-          { title: 'good news' },
+    postAdapter.create(
+          { title: 'a good news' },
           (err, data) => {
             if (err) done(err)
             assert(data.title, 'good news', 'same value of title')
@@ -60,8 +59,8 @@ describe('adapter operate entity', () => {
   it('create entity with promise', function (done) {
     this.timeout(timeOutValue)
 
-    dbAdapter.
-      create('post', { title: 'good news' }).
+    postAdapter.
+      create({ title: 'good news' }).
       then((data) => {
         assert(data.title, 'good news', 'same value of title')
 
@@ -75,8 +74,8 @@ describe('adapter operate entity', () => {
   it('retrieve and update entity with promise', function (done) {
     this.timeout(timeOutValue * 3)
 
-    dbAdapter.
-      retrieve('post', { _id: insertedPosts[0] }).
+    postAdapter.
+      retrieve({ _id: insertedPosts[0] }).
       then((data) => {
         const post = Array.isArray(data) ? data[0] : data
 
@@ -84,15 +83,15 @@ describe('adapter operate entity', () => {
 
         post.title = 'bad news'
 
-        return dbAdapter.update('post',
+        return postAdapter.update(
           { _id: insertedPosts[0] },
           { title: 'bad news' }
         )
       }).
       then((data) => {
         if (data.ok && data.ok === 1) {
-          return dbAdapter.
-            retrieve('post', { _id: insertedPosts[0] })
+          return postAdapter.
+            retrieve({ _id: insertedPosts[0] })
         }
 
         throw new Error('no one update')
@@ -107,12 +106,57 @@ describe('adapter operate entity', () => {
       catch((err) => done(err))
   })
 
+  it('retrieve list with promise', function (done) {
+    this.timeout(timeOutValue * 3)
+
+    postAdapter.
+      retrieve({
+        _id: {
+          $in: [insertedPosts[0], insertedPosts[1]]
+        }
+      }).
+      then((data) => {
+        const posts = data
+
+        assert.equal(posts.length, 2, 'got 2 posts')
+        assert.equal(
+          posts[0]._id.toString(),
+          insertedPosts[0],
+          'compare the 1st id'
+        )
+        assert.equal(
+          posts[1]._id.toString(),
+          insertedPosts[1],
+          'compare the 1st id'
+        )
+
+        done()
+      }).
+      catch((err) => done(err))
+  })
+
+  it('count with promise', function (done) {
+    this.timeout(timeOutValue * 3)
+
+    postAdapter.
+      count({
+        _id: {
+          $in: [insertedPosts[0], insertedPosts[1]]
+        }
+      }).
+      then((data) => {
+        assert.equal(data, 2, 'got count of posts is 2')
+        done()
+      }).
+      catch((err) => done(err))
+  })
+
   it('delete entity with promise', function (done) {
     this.timeout(timeOutValue)
 
-    const deleteFunc = dbAdapter.delete
+    const deleteFunc = postAdapter.delete
     const deleteFuncs = insertedPosts.
-      map((id) => deleteFunc.bind(dbAdapter, 'post', { _id: id }))
+      map((id) => deleteFunc.bind(postAdapter, { _id: id }))
 
     aq.
       parallel(deleteFuncs).
