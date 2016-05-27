@@ -36,7 +36,11 @@ describe('connections', () => {
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
-    conns.on('error', (err, conn) => done(err))
+    conns.on('error', (err, conn) => {
+      console.log(err.message)
+      done(err)
+    }
+    )
     conns.createByConfig('conn4', config)
   })
 

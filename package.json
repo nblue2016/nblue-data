@@ -1,6 +1,6 @@
 {
   "name": "nblue-data",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "data module",
   "main": "index.js",
   "directories": {
@@ -24,9 +24,15 @@
   },
   "homepage": "https://github.com/nblue2016/nblue-data#readme",
   "files": [
-    "",
-    "lib/"
+    "lib",
+    "index.js"
   ],
+  "_npmVersion": "3.8.6",
+  "_npmUser": {
+    "name": "nblue2016",
+    "email": "nblue2016@163.com"
+  },
+  "main": "index.js",
   "dependencies": {
     "mongoose": "^4.4.17",
     "nblue-core": "0.0.25"

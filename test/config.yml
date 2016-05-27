@@ -6,3 +6,4 @@ connections:
   - conn3: "mongodb://user:pass@host:port/db?authDb=dbname"
   - conn4: "mongodb://user:pass@host2:port/db?authDb=dbname"
   - conn5: "mongodb://user:incorrectPass@host2:port/db?authDb=dbname"
+env: debug

@@ -23,7 +23,7 @@ if (!global.schemas) global.schemas = schemas
 // parse configuration file
 const configFile = String.format('%s/config.yml', __dirname)
 const config = ConfigMap.
-  parseConfigSync(configFile, ['dev', 'debug'])
+  parseConfigSync(configFile, ['dev', 'debug', 'qa'])
 
 if (!global.config) global.config = config
 

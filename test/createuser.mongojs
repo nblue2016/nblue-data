@@ -1,0 +1,20 @@
+db.creatUser([
+  {
+    user: 'admin',
+    pwd: 'password',
+    roles:[
+        { role: 'readWriteAnyDatabase', db: 'admin' },
+        { role: 'userAdminAnyDatabase', db: 'admin' },
+        { role: 'dbAdminAnyDatabase', db: 'admin' }
+    ]
+  },
+  {
+    user: 'nblue',
+    pwd: 'password',
+    roles:[
+        { role: 'readWrite', db: 'nblue' },
+        { role: 'userAdmin', db: 'nblue' },
+        { role: 'dbAdmin', db: 'nblue' }
+    ]
+  }
+])

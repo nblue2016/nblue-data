@@ -1,5 +1,6 @@
 *.log
-*.debug.*
-*.release.*
+*.debug.yml
+*.release.yml
+*.qa.yml
 node_modules
 node_modules/*.*
