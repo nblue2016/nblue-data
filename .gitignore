@@ -2,5 +2,8 @@
 *.debug.yml
 *.release.yml
 *.qa.yml
+*.dev.yml
+*.uat.yml
+*.prod.yml
 node_modules
 node_modules/*.*
