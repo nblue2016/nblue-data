@@ -1,4 +1,6 @@
 const assert = require('assert')
+const fs = require('fs')
+const path = require('path')
 const dataLib = require('../lib')
 
 const aq = global.aq
@@ -12,6 +14,8 @@ const insertedPosts = []
 
 const conns = new MongoDbConnections()
 const postAdapter = conns.createAdapter('post')
+const categoryAdapter = conns.createAdapter('category')
+const userAdapter = conns.createAdapter('user')
 
 before(function (done) {
   this.timeout(20000)
@@ -48,7 +52,7 @@ describe('post adapter operate entity', () => {
           { title: 'a good news' },
           (err, data) => {
             if (err) done(err)
-            assert(data.title, 'good news', 'same value of title')
+            assert.equal(data.title, 'a good news', 'same value of title')
 
             insertedPosts.push(data._id)
 
@@ -62,7 +66,7 @@ describe('post adapter operate entity', () => {
     postAdapter.
       create({ title: 'good news' }).
       then((data) => {
-        assert(data.title, 'good news', 'same value of title')
+        assert.equal(data.title, 'good news', 'same value of title')
 
         insertedPosts.push(data._id)
 
@@ -79,7 +83,7 @@ describe('post adapter operate entity', () => {
       then((data) => {
         const post = Array.isArray(data) ? data[0] : data
 
-        assert(post.title, 'good news', 'same value of title')
+        assert.equal(post.title, 'a good news', 'same value of title')
 
         post.title = 'bad news'
 
@@ -99,7 +103,7 @@ describe('post adapter operate entity', () => {
       then((data) => {
         const post = Array.isArray(data) ? data[0] : data
 
-        assert(post.title, 'bad news', 'same value of title')
+        assert.equal(post.title, 'bad news', 'same value of title')
 
         done()
       }).
@@ -170,6 +174,260 @@ describe('post adapter operate entity', () => {
 
         assert.equal(results.length, 2, 'tow entites were deleted')
 
+        done()
+      }).
+      catch((err) => done(err))
+  })
+})
+
+describe('catagory adapter operate entity', () => {
+  it('create catagory with auto increment', function (done) {
+    this.timeout(timeOutValue)
+
+    let latestID = -2
+
+    categoryAdapter.retrieve(
+      {}, {
+        sort: {
+          CategoryID: -1
+        },
+        limit: 1
+      }).
+    then((data) => {
+      let entity = null
+
+      if (data) {
+        entity = Array.isArray(data) ? data[0] : data
+        if (entity) latestID = entity.CategoryID
+      }
+
+      return categoryAdapter.create({
+        CategoryName: 'test1',
+        Description: 'test catagory'
+      })
+    }).
+    then((data) => {
+      const categoryID = latestID + 2
+
+      assert.equal(data.CategoryID, categoryID, 'auto increment id')
+
+      return categoryAdapter.create({
+        CategoryName: 'test2',
+        Description: 'test catagory'
+      })
+    }).
+    then((data) => {
+      const categoryID = latestID + 4
+
+      assert.equal(data.CategoryID, categoryID, 'auto increment id, too')
+
+      done()
+    }).
+    catch((err) => done(err))
+  })
+})
+
+describe('user adapter operate entity', () => {
+  const userData = fs.readFileSync(
+      path.join(__dirname, 'users.json'), { encoding: 'utf-8' })
+
+  const users = JSON.parse(userData)
+
+  it('batch create users', (done) => {
+    userAdapter.
+      delete({}).
+      then((data) => {
+        // after delete old data
+        const createUserFunc = (user) => userAdapter.create(user)
+
+        // create all users
+        return aq.parallel(users.map((user) => createUserFunc(user)))
+      }).
+      then((data) => {
+        assert.equal(data.length, 12, 'created users.')
+
+        // test count function
+        return userAdapter.count()
+      }).
+      then((data) => {
+        assert.equal(data, 12, 'count users.')
+
+        done()
+      }).
+      catch((err) => done(err))
+  })
+
+  it('find one by filter for users', (done) => {
+    userAdapter.
+      retrieve(
+        {}, {
+          method: 'findOne'
+        }
+      ).
+      then((data) => {
+        assert.equal(Array.isArray(data), false, 'only found one element')
+        assert.equal(data.nick, 'test01', 'only found one element')
+
+        done()
+      }).
+      catch((err) => done(err))
+  })
+
+  it('complex filter for users', (done) => {
+    userAdapter.
+      retrieve({}).
+      then((data) => {
+        assert.equal(data.length, 12, 'filter all users.')
+
+        // test limit options feature
+        return userAdapter.
+          retrieve({}, { limit: 8 })
+      }).
+      then((data) => {
+        assert.equal(data.length, 8, 'get all users but limit return limit 8.')
+
+        // test top options feature
+        return userAdapter.
+          retrieve({}, { top: 6 })
+      }).
+      then((data) => {
+        assert.equal(data.length, 6, 'get all users but limit return top 6.')
+
+        // test filter feature
+        return userAdapter.
+          retrieve({
+            gender: 1
+          })
+      }).
+      then((data) => {
+        assert.equal(data.length, 9, 'get users that gender is 1.')
+
+        // test filter feature 2
+        return userAdapter.
+          retrieve({
+            gender: 2
+          })
+      }).
+      then((data) => {
+        assert.equal(data.length, 3, 'get users that gender is 2.')
+
+        // test filter feature 3
+        return userAdapter.
+          retrieve({
+            nick: 'test08'
+          })
+      }).
+      then((data) => {
+        assert.equal(
+          data[0].email,
+          'test08@abc.com',
+          'get users that nick is test08.'
+        )
+
+        // test sort and pager options feature
+        return userAdapter.
+          retrieve(
+            {}, {
+              sort: {
+                nick: 1
+              },
+              pageSize: 3,
+              page: 2
+            })
+      }).
+      then((data) => {
+        // get the data by pager
+        assert.equal(data.length, 3, 'get the count of matched users.')
+        assert.equal(data[0].nick, 'test04', 'get the 1st user in page 2 ')
+        assert.equal(data[1].nick, 'test05', 'get the 2nd user in page 2 ')
+        assert.equal(data[2].nick, 'test06', 'get the 3rd user in page 2 ')
+
+        // test sort and pager options feature 2
+        return userAdapter.
+          retrieve(
+            {}, {
+              sort: {
+                nick: 1
+              },
+              pageSize: 5,
+              page: 3
+            })
+      }).
+      then((data) => {
+        // get the data by pager
+        assert.equal(data.length, 2, 'get the count of matched users.')
+        assert.equal(data[0].nick, 'test11', 'get the 1st user in page 2 ')
+        assert.equal(data[1].nick, 'test12', 'get the 2nd user in page 2 ')
+
+        // test sort, pager and projection options feature
+        return userAdapter.
+          retrieve(
+            {}, {
+              projection: {
+                _id: 0,
+                nick: 1,
+                email: 1
+              },
+              sort: {
+                nick: 1
+              },
+              pageSize: 5,
+              page: 3
+            })
+      }).
+      then((data) => {
+        // get the data by pager
+        assert.equal(data.length, 2, 'get the count of matched users.')
+        assert.deepEqual(
+          Object.keys(data[0]),
+          ['email', 'nick'],
+          'get properties of the 1st user'
+        )
+        assert.deepEqual(
+            Object.keys(data[1]),
+            ['email', 'nick'],
+            'get properties of the 1st user'
+          )
+
+        done()
+      }).
+      catch((err) => done(err))
+  })
+
+  it('batch modified items for users', (done) => {
+    userAdapter.update(
+      {
+        gender: 1
+      }, {
+        nick: 'modified'
+      }
+    ).
+    then((data) => {
+      assert.equal(data.ok, 1, 'parse ok value')
+      assert.equal(data.nModified, 9, 'parse nModified value')
+      assert.equal(data.n, 9, 'parse n value')
+
+      return userAdapter.
+        retrieve({
+          nick: 'modified'
+        })
+    }).
+    then((data) => {
+      assert.equal(data.length, 9, '9 users were updated.')
+
+      done()
+    }).
+    catch((err) => done(err))
+  })
+
+  it('batch delete items for users', (done) => {
+    userAdapter.
+      delete({
+        gender: 2
+      }).
+      then((data) => {
+        assert.equal(data.ok, 1, 'parse ok value')
+        assert.equal(data.n, 3, 'parse n value')
         done()
       }).
       catch((err) => done(err))

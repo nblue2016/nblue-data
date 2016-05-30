@@ -1,0 +1,74 @@
+[
+  {
+    "userToken": "test01_12321j3io",
+    "nick": "test01",
+    "email": "test01@abc.com",
+    "gender": 2
+  },
+  {
+    "userToken": "test02_12321j3io",
+    "nick": "test02",
+    "email": "test02@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test03_12321j3io",
+    "nick": "test03",
+    "email": "test03@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test04_12321j3io",
+    "nick": "test04",
+    "email": "test04@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test05_12321j3io",
+    "nick": "test05",
+    "email": "test05@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test06_12321j3io",
+    "nick": "test06",
+    "email": "test06@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test07_12321j3io",
+    "nick": "test07",
+    "email": "test07@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test08_12321j3io",
+    "nick": "test08",
+    "email": "test08@abc.com",
+    "gender": 2
+  },
+  {
+    "userToken": "test09_12321j3io",
+    "nick": "test09",
+    "email": "test09@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test10_12321j3io",
+    "nick": "test10",
+    "email": "test10@abc.com",
+    "gender": 2
+  },
+  {
+    "userToken": "test11_12321j3io",
+    "nick": "test11",
+    "email": "test11@abc.com",
+    "gender": 1
+  },
+  {
+    "userToken": "test12_12321j3io",
+    "nick": "test12",
+    "email": "test12@abc.com",
+    "gender": 1
+  }
+]
