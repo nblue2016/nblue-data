@@ -13,7 +13,7 @@ const files = ['blog._js', 'blog.json', 'northwind.json']
 
 files.
   map((file) => path.join(__dirname, 'schemas', file)).
-  map((file) => cache.add(file))
+  map((file) => cache.define(file))
 
 // only get schema of entities for mongo-db
 const schemas = cache.getSchemas('mongo')

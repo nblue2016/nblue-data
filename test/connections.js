@@ -1,7 +1,7 @@
-const data = require('../lib')
+const dataLib = require('../lib')
 
 
-const MongoDbConnections = data.MongoDbConnections
+const DbConnections = dataLib.MongooseConnections
 const timeoutValue = 15000
 
 const config = global.config
@@ -10,7 +10,7 @@ describe('connections', () => {
   it('Test connection string1', function (done) {
     this.timeout(timeoutValue)
 
-    const conns = new MongoDbConnections()
+    const conns = new DbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -21,7 +21,7 @@ describe('connections', () => {
   it('Test connection string1 again', function (done) {
     this.timeout(timeoutValue)
 
-    const conns = new MongoDbConnections()
+    const conns = new DbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -32,7 +32,7 @@ describe('connections', () => {
   it('Test connection string4', function (done) {
     this.timeout(timeoutValue)
 
-    const conns = new MongoDbConnections()
+    const conns = new DbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -47,7 +47,7 @@ describe('connections', () => {
   it('Test connection string5, auth failed', function (done) {
     this.timeout(timeoutValue)
 
-    const conns = new MongoDbConnections()
+    const conns = new DbConnections()
 
     conns.on('open', (conn) => conns.close(conn.Name))
     conns.on('close', (conn) => done())
@@ -58,7 +58,7 @@ describe('connections', () => {
   it('Test all connections', function (done) {
     this.timeout(timeoutValue * 3)
 
-    const conns = new MongoDbConnections()
+    const conns = new DbConnections()
 
     const opened = []
 

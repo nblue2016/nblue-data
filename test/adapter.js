@@ -5,14 +5,14 @@ const dataLib = require('../lib')
 
 const aq = global.aq
 const config = global.config
-const MongoDbConnections = dataLib.MongoDbConnections
-// const MongoDbAdapter = dataLib.MongoDbAdapter
+const DbConnections = dataLib.MongooseConnections
+// const DbConnections = dataLib.MongoDbConnections
 
 const timeOutValue = 5000
 const opened = []
 const insertedPosts = []
 
-const conns = new MongoDbConnections()
+const conns = new DbConnections()
 const postAdapter = conns.createAdapter('post')
 const categoryAdapter = conns.createAdapter('category')
 const userAdapter = conns.createAdapter('user')
@@ -274,6 +274,8 @@ describe('user adapter operate entity', () => {
   })
 
   it('complex filter for users', (done) => {
+    userAdapter.SimpleData = true
+
     userAdapter.
       retrieve({}).
       then((data) => {
@@ -391,7 +393,10 @@ describe('user adapter operate entity', () => {
 
         done()
       }).
-      catch((err) => done(err))
+      catch((err) => done(err)).
+      finally(() => {
+        userAdapter.SimpleData = false
+      })
   })
 
   it('batch modified items for users', (done) => {
