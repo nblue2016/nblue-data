@@ -1,3 +1,4 @@
 ---
   rules:
     consistent-this: 0
+    no-underscore-dangle: 0

@@ -5,7 +5,7 @@ const dataLib = require('../lib')
 
 const aq = global.aq
 const config = global.config
-const DbConnections = dataLib.MongooseConnections
+const DbConnections = dataLib.MongoDbConnections
 // const DbConnections = dataLib.MongoDbConnections
 
 const timeOutValue = 5000
@@ -236,13 +236,7 @@ describe('user adapter operate entity', () => {
   it('batch create users', (done) => {
     userAdapter.
       delete({}).
-      then((data) => {
-        // after delete old data
-        const createUserFunc = (user) => userAdapter.create(user)
-
-        // create all users
-        return aq.parallel(users.map((user) => createUserFunc(user)))
-      }).
+      then((data) => userAdapter.create(users)).
       then((data) => {
         assert.equal(data.length, 12, 'created users.')
 
@@ -382,12 +376,12 @@ describe('user adapter operate entity', () => {
         assert.equal(data.length, 2, 'get the count of matched users.')
         assert.deepEqual(
           Object.keys(data[0]),
-          ['email', 'nick'],
+          ['nick', 'email'],
           'get properties of the 1st user'
         )
         assert.deepEqual(
             Object.keys(data[1]),
-            ['email', 'nick'],
+            ['nick', 'email'],
             'get properties of the 1st user'
           )
 

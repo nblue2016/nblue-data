@@ -1,7 +1,7 @@
 const dataLib = require('../lib')
 
 
-const DbConnections = dataLib.MongooseConnections
+const DbConnections = dataLib.MongoDbConnections
 const timeoutValue = 15000
 
 const config = global.config
