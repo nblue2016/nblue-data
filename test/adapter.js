@@ -5,35 +5,34 @@ const dataLib = require('../lib')
 
 const aq = global.aq
 const config = global.config
-const DbConnections = dataLib.MongoDbConnections
+const DbConnections = dataLib.DbConnections
 // const DbConnections = dataLib.MongoDbConnections
 
 const timeOutValue = 5000
-const opened = []
+
 const insertedPosts = []
 
 const conns = new DbConnections()
-const postAdapter = conns.createAdapter('post')
-const categoryAdapter = conns.createAdapter('category')
-const userAdapter = conns.createAdapter('user')
+
+conns.registerProxy('mongodb:', new dataLib.MongooseProxy())
+
+let
+  categoryAdapter = null,
+  postAdapter = null,
+  userAdapter = null
 
 before(function (done) {
   this.timeout(20000)
 
-  conns.on('open', (conn) => {
-    const name = conn.Name
-
-    opened.push(name)
-
-    if (opened.includes('conn1') &&
-      opened.includes('conn4')) {
-      // release all opened
-      done()
-    }
-  })
-  conns.on('error', () => null)
-
-  conns.createByConfigs(config)
+  conns.
+    createByConfigs(config).
+    then(() => {
+      categoryAdapter = conns.createAdapter('category')
+      postAdapter = conns.createAdapter('post')
+      userAdapter = conns.createAdapter('user')
+    }).
+    then(() => done()).
+    catch((err) => done(err))
 })
 
 describe('adapter test', () => {
@@ -434,6 +433,8 @@ describe('user adapter operate entity', () => {
 })
 
 after((done) => {
-  conns.closeAll()
-  done()
+  conns.
+    closeAll().
+    then(() => done()).
+    catch((err) => done(err))
 })

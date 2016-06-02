@@ -5,9 +5,9 @@ const dataLib = require('../lib')
 
 // const Mongoose = require('mongoose')
 const ConfigMap = global.ConfigMap
-// const Proxy = dataLib.MongoDbProxy
-const Proxy = dataLib.MongooseProxy
-// const DbConnections = dataLib.MongoDbConnections
+const Proxy = dataLib.MongoDbProxy
+// const Proxy = dataLib.MongooseProxy
+const DbConnections = dataLib.DbConnections
 
 // parse configuration file
 const configFile = String.format('%s/config.yml', __dirname)
@@ -16,6 +16,7 @@ const config = ConfigMap.
 
 if (!global.config) global.config = config
 
+/*
 const url = config.get('connections')[0].get('conn1')
 
 const proxy = new Proxy()
@@ -36,41 +37,70 @@ proxy.
     console.log('#error')
     console.log(err.message)
   })
-
-/*
-
+*/
 
 const conns = new DbConnections()
 
-// conns.Driver = 'mongodb'
+conns.registerProxy('mongodb:', new Proxy())
 
-conns.on('connected', (conn) => {
-  console.log('# ready to close')
-
-  global.setTimeout(() => {
-    console.log('c1')
-    // console.log(conns)
-
-    conns.
-      close(conn.Name).
-      then((data) => {
-        console.log('c2')
-        // console.log(conns)
-
-        console.log('# closed')
-        console.log(data)
-      })
-  }, 100)
-})
-
+/*
 conns.
   createByConfig('conn1', config).
   then((data) => {
     console.log('# created')
     console.log(data.Name)
+
+    conns.
+      close('conn1').
+      then((conn) => {
+        console.log(conn.Name)
+
+        return 0
+      })
   }).
   catch((err) => {
     console.log('#error')
     console.log(err.message)
   })
 */
+
+conns.on('open', (name) => {
+  console.log(`open ${name}`)
+})
+
+conns.on('connected', (name) => {
+  console.log(`connected ${name}`)
+})
+
+conns.on('close', (name) => {
+  console.log(`close ${name}`)
+})
+
+conns.on('disconnected', (name) => {
+  console.log(`disconnected ${name}`)
+})
+
+conns.on('error', (err) => {
+  console.log(`# event error, details: ${err.message}`)
+})
+
+conns.
+  createByConfigs(config).
+  then(() => {
+    console.log('created all')
+
+    return conns.closeAll()
+  }).
+  then(() => {
+    console.log('closed all')
+  }).
+  catch((err) => {
+    console.log('#error')
+    console.log(err.message)
+
+    conns.
+      closeAll().
+      then((data) => {
+        console.log('# closed when issue occured.')
+      })
+  })

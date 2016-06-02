@@ -11,7 +11,7 @@
         tags: ["String"],
         publishedOn: {
           type: "Date",
-          default: Date.now()
+          default: () => Date.now()
         },
         publishedBy: "String",
         status: "Number",
