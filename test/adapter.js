@@ -33,7 +33,7 @@ const createConnFunc = (proxy) => {
 }
 
   // const Proxy = proxy
-const conns = createConnFunc(proxies[0])
+const conns = createConnFunc(proxies[1])
 
 before(function (done) {
   this.timeout(20000)
@@ -241,6 +241,8 @@ describe('catagory adapter operate entity', () => {
 })
 
 describe('user adapter operate entity', () => {
+  this.timeout = timeOutValue
+
   const userData = fs.readFileSync(
         path.join(__dirname, 'users.json'), { encoding: 'utf-8' })
 

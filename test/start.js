@@ -24,8 +24,8 @@ if (!global.config) global.config = config
 
 // define test script files
 const testScripts = [
-  './connections',
-  './schema',
+  '#./connections',
+  '#./schema',
   './adapter'
 ]
 

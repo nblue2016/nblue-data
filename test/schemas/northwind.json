@@ -10,7 +10,7 @@
         "CategoryName": "String"
       },
       "options": {
-        "collection": "Categories",
+        "collection": "categories",
         "autoIncrement": {
             "field": "CategoryID",
             "startValue": 0,
