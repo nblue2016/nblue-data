@@ -92,8 +92,12 @@ describe('create proxies', () => {
                         { title: 'a good news' },
                         (err, data) => {
                           if (err) done(err)
+
                           assert.equal(
                             data.title, 'a good news', 'same value of title')
+
+                          assert.deepEqual(
+                              data.tags, ['wrapped'], 'same value of title')
 
                           insertedPosts.push(data._id)
 
@@ -224,6 +228,16 @@ describe('create proxies', () => {
                       done()
                     }).
                     catch((err) => done(err))
+        })
+
+        it('test wrapper', (done) => {
+          postAdapter.getWrapper = {
+            name: 'post',
+            to: (post) => post,
+            from: (post) => post
+          }
+
+          done()
         })
       })
 
@@ -522,15 +536,6 @@ describe('create proxies', () => {
                 done()
               }).
               catch((err) => done(err))
-        })
-
-        it('test', (done) => {
-          userAdapter.wrapper = {
-            to: (user) => user,
-            from: (user) => user
-          }
-
-          done()
         })
       })
     })

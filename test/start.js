@@ -8,7 +8,7 @@ const SchemaCache = dataLib.SchemaCache
 
 // parse schema files
 const schemas = SchemaCache.create()
-const schemaFiles = ['blog._js', 'blog.json', 'northwind.json']
+const schemaFiles = ['blog.json', 'blog._js', 'northwind.json']
 
 schemaFiles.
   map((file) => path.join(__dirname, 'schemas', file)).
@@ -24,8 +24,8 @@ if (!global.config) global.config = config
 
 // define test script files
 const testScripts = [
-  '#./connections',
-  '#./schema',
+  './connections',
+  './schema',
   './adapter'
 ]
 
