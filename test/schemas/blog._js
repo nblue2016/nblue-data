@@ -6,12 +6,23 @@
     post: {
       model: {
         title: 'String',
+        complexTitle:{
+          titile: 'String',
+          key: {
+            type:'String',
+            default: 'test'
+          }
+        },
+        key: {
+          type: 'String',
+          default: 'test-key'
+        },
         abstract: 'String',
         content: 'String',
         tags: ['String'],
         publishedOn: {
           type: 'Date',
-          default: () => Date.now()
+          default: () => new Date()
         },
         publishedBy: 'String',
         status: 'Number',
@@ -29,8 +40,14 @@
           },
           'from': (post) => {
             post.tags = ['wrapped']
+
             return post
           }
+        }
+      },
+      methods:{
+        getName: function(){
+          return `${this.title}_test`
         }
       }
     }

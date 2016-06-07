@@ -78,6 +78,8 @@ describe('create proxies', () => {
 
           postAdapter = envs.postAdapter
 
+          postAdapter.ValidateBeforeSave = true
+
           // clear old data
           postAdapter.
                   delete({}).
