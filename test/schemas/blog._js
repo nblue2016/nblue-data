@@ -15,14 +15,18 @@
         },
         key: {
           type: 'String',
-          default: 'test-key'
+          require: true,
+          default: 'key1',
+          limit: ['key1', 'key2']
         },
         abstract: 'String',
         content: 'String',
         tags: ['String'],
         publishedOn: {
           type: 'Date',
-          default: () => new Date()
+          default: function(){
+            return new Date()
+          }
         },
         publishedBy: 'String',
         status: 'Number',
@@ -43,11 +47,16 @@
 
             return post
           }
-        }
-      },
-      methods:{
-        getName: function(){
-          return `${this.title}_test`
+        },
+        methods:{
+          getNewTitle: function(){
+            return `${this.title}_test`
+          }
+        },
+        validate: function(post) {
+          this.autoValidate(post)
+
+          if (!post.title) throw new Error('invaild title')
         }
       }
     }

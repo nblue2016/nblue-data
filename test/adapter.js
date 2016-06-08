@@ -78,8 +78,6 @@ describe('create proxies', () => {
 
           postAdapter = envs.postAdapter
 
-          postAdapter.ValidateBeforeSave = true
-
           // clear old data
           postAdapter.
                   delete({}).
@@ -230,16 +228,6 @@ describe('create proxies', () => {
                       done()
                     }).
                     catch((err) => done(err))
-        })
-
-        it('test wrapper', (done) => {
-          postAdapter.getWrapper = {
-            name: 'post',
-            to: (post) => post,
-            from: (post) => post
-          }
-
-          done()
         })
       })
 
@@ -538,6 +526,106 @@ describe('create proxies', () => {
                 done()
               }).
               catch((err) => done(err))
+        })
+      })
+
+      describe('test default value', () => {
+        let postAdapter = null
+
+        before((done) => {
+          const envs = envMap.get(name)
+
+          postAdapter = envs.postAdapter
+
+          // clear old data
+          postAdapter.
+                  delete({}).
+                  then(() => done()).
+                  catch((err) => done(err))
+        })
+
+        it('test default value and bind methods', function (done) {
+          this.timeout(timeOutValue)
+
+          const post = {
+            title: 'title1'
+          }
+
+          postAdapter.
+            create(post).
+            then((data) => {
+              assert.equal(
+                data.key, 'key1', 'get default value for post.key')
+              assert.equal(
+                data.complexTitle.key,
+                'test',
+                'get default value for post.complexTitle.key'
+              )
+              assert.equal(
+                data.getNewTitle(),
+                `${post.title}_test`,
+                'call getNewTitle method'
+              )
+
+              done()
+            }).
+            catch((err) => done(err))
+        })
+
+        it('test wrapper function', (done) => {
+          // postAdapter.ValidateBeforeSave = true
+          postAdapter.getWrapper = function () {
+            return {
+              name: 'post',
+              to: (post) => {
+                post.abstract = 'abstract-test'
+                post.viewCount = 10
+
+                return post
+              },
+              from: (post) => post
+            }
+          }
+
+          postAdapter.create({
+            title: 'test'
+          }).then((data) => {
+            assert.equal(data.abstract, 'abstract-test', 'tested wrapper ')
+            assert.equal(data.viewCount, 10, 'tested wrapper ')
+            done()
+          }).
+          catch((err) => done(err))
+        })
+
+        after(() => {
+          postAdapter.getWrapper = null
+        })
+      })
+
+      describe('test validations', () => {
+        let postAdapter = null
+
+        before((done) => {
+          const envs = envMap.get(name)
+
+          postAdapter = envs.postAdapter
+
+          // clear old data
+          postAdapter.
+                  delete({}).
+                  then(() => done()).
+                  catch((err) => done(err))
+        })
+
+        it('test wrapper function', (done) => {
+          postAdapter.create({
+            title: 'test'
+          }).then((data) => {
+            done()
+          }).
+          catch((err) => {
+            done(err)
+          })
         })
       })
     })
