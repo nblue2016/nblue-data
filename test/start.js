@@ -26,7 +26,9 @@ if (!global.config) global.config = config
 const testScripts = [
   './connections',
   './schema',
-  './adapter'
+  './adapter/crud',
+  './adapter/default',
+  './adapter/validator'
 ]
 
 // start to test
