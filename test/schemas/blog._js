@@ -5,9 +5,12 @@
   entity: {
     post: {
       model: {
-        title: 'String',
+        title: {
+          type: 'String',
+          require: true
+        },
         complexTitle:{
-          titile: 'String',
+          title: 'String',
           key: {
             type:'String',
             default: 'test'
@@ -56,7 +59,11 @@
         validate: function(post) {
           this.autoValidate(post)
 
-          if (!post.title) throw new Error('invaild title')
+          if (post.content) {
+            if (post.content.length <= 10) {
+              throw new Error('less length of content')
+            }
+          }
         }
       }
     }

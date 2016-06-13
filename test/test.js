@@ -16,53 +16,9 @@ const config = ConfigMap.
 
 if (!global.config) global.config = config
 
-/*
-const url = config.get('connections')[0].get('conn1')
-
-const proxy = new Proxy()
-const result = proxy.parseUrl(url)
-
-console.log(result)
-proxy.
-  open(result.connectionString, result.options).
-  then((conn) => {
-    console.log('opened')
-
-    return proxy.close(conn)
-  }).
-  then(() => {
-    console.log('closed')
-  }).
-  catch((err) => {
-    console.log('#error')
-    console.log(err.message)
-  })
-*/
-
 const conns = new DbConnections()
 
 conns.registerProxy('mongodb:', new Proxy())
-
-/*
-conns.
-  createByConfig('conn1', config).
-  then((data) => {
-    console.log('# created')
-    console.log(data.Name)
-
-    conns.
-      close('conn1').
-      then((conn) => {
-        console.log(conn.Name)
-
-        return 0
-      })
-  }).
-  catch((err) => {
-    console.log('#error')
-    console.log(err.message)
-  })
-*/
 
 conns.on('open', (name) => {
   console.log(`open ${name}`)

@@ -40,7 +40,13 @@ describe('schemas', () => {
     assert.equal(
       mapped.has('CanComment'), true, 'found property of CanComment')
 
-    assert.equal(model.title, 'String', 'type property of title')
+    assert.deepEqual(
+      model.title,
+      {
+        type: 'String',
+        require: true
+      },
+      'type property of title')
     assert.equal(model.abstract, 'String', 'type property of abstract')
     assert.equal(model.content, 'String', 'type property of content')
     assert.deepEqual(model.tags, ['String'], 'type property of tags')

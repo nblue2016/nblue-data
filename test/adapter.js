@@ -2,6 +2,7 @@ const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
 const dataLib = require('../lib')
+const ValidatorError = require('../lib/error/validator')
 
 const aq = global.aq
 const config = global.config
@@ -602,13 +603,16 @@ describe('create proxies', () => {
         })
       })
 
-      describe('test validations', () => {
+      describe('test validation for entity', () => {
+        const validatorError = new Error('type error')
+
         let postAdapter = null
 
         before((done) => {
           const envs = envMap.get(name)
 
           postAdapter = envs.postAdapter
+          postAdapter.ValidateBeforeSave = true
 
           // clear old data
           postAdapter.
@@ -617,15 +621,107 @@ describe('create proxies', () => {
                   catch((err) => done(err))
         })
 
-        it('test wrapper function', (done) => {
+        it('test invalid model key function', (done) => {
           postAdapter.create({
-            title: 'test'
-          }).then((data) => {
-            done()
+            title: 'test',
+            name: 'invalid'
+          }).then(() => {
+            done(validatorError)
           }).
           catch((err) => {
+            if (err instanceof ValidatorError) {
+              done()
+
+              return
+            }
+
             done(err)
           })
+        })
+
+        it('test require key', (done) => {
+          postAdapter.create({
+            viewCount: 20,
+            likeCount: 20
+          }).then(() => {
+            done(validatorError)
+          }).
+          catch((err) => {
+            if (err instanceof ValidatorError) {
+              done()
+
+              return
+            }
+
+            done(err)
+          })
+        })
+
+        it('test invalid string type', (done) => {
+          postAdapter.create({
+            title: 3232,
+            status: 'unknown'
+          }).then((data) => {
+            done(validatorError)
+          }).
+          catch((err) => {
+            if (err instanceof ValidatorError) {
+              return postAdapter.create({
+                title: 'test'
+              })
+            }
+
+            return done(err)
+          }).
+          then(() => done()).
+          catch((err) => done(err))
+        })
+
+        it('test invalid number type', (done) => {
+          postAdapter.create({
+            title: 'test',
+            status: 'unknown'
+          }).then((data) => {
+            done(validatorError)
+          }).
+          catch((err) => {
+            if (err instanceof ValidatorError) {
+              return postAdapter.create({
+                title: 'test',
+                status: 2
+              })
+            }
+
+            return done(err)
+          }).
+          then(() => done()).
+          catch((err) => done(err))
+        })
+
+        it('test invalid date type', (done) => {
+          postAdapter.create({
+            title: 'test',
+            publishedOn: 'unknown'
+          }).then((data) => {
+            done(validatorError)
+          }).
+          catch((err) => {
+            if (err instanceof ValidatorError) {
+              return postAdapter.create({
+                title: 'test',
+                publishedOn: new Date()
+              })
+            }
+
+            return done(err)
+          }).
+          then(() => done()).
+          catch((err) => done(err))
+        })
+
+        after(() => {
+          // postAdapter.ValidateBeforeSave = false
+          postAdapter = null
         })
       })
     })

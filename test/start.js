@@ -4,10 +4,10 @@ const path = require('path')
 const dataLib = require('../lib')
 
 const ConfigMap = global.ConfigMap
-const SchemaCache = dataLib.SchemaCache
+const Schemas = dataLib.Schemas
 
 // parse schema files
-const schemas = SchemaCache.create()
+const schemas = Schemas.create()
 const schemaFiles = ['blog.json', 'blog._js', 'northwind.json']
 
 schemaFiles.
