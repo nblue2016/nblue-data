@@ -32,9 +32,9 @@
     "email": "nblue2016@163.com"
   },
   "dependencies": {
-    "nblue-core": "0.0.39",
     "mongodb": "^2.1.18",
-    "mongoose": "^4.4.17"
+    "mongoose": "^4.4.17",
+    "nblue-core": "0.0.41"
   },
   "devDependencies": {
     "eslint": "^2.10.1",
