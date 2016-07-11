@@ -1,4 +1,4 @@
-require('nblue-core')
+require('nblue')
 
 const path = require('path')
 const dataLib = require('../lib')
