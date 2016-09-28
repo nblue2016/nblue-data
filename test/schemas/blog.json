@@ -1,58 +1,55 @@
 {
-  "database":
+  "$database":
   {
     "default": "conn1"
   },
-  "entity":
+  "post":
   {
-    "post":
+    "model":
     {
-      "model":
-      {
-        "title": "String",
-        "abstract": "String",
-        "content": "String",
-        "tags": ["String"],
-        "publishedOn": { "type": "Date", "default": "${Date.now()}" },
-        "publishedBy": "String",
-        "status": "Number",
-        "viewCount": "Number",
-        "likeCount": "Number",
-        "CanComment": "Boolean"
-      },
-      "options": { "collection": "post" }
+      "title": "String",
+      "abstract": "String",
+      "content": "String",
+      "tags": ["String"],
+      "publishedOn": { "$type": "Date", "$default": "${Date.now()}" },
+      "publishedBy": "String",
+      "status": "Number",
+      "viewCount": "Number",
+      "likeCount": "Number",
+      "CanComment": "Boolean"
     },
-    "user":
+    "options": { "collection": "post" }
+  },
+  "user":
+  {
+    "model":
     {
-      "model":
-      {
-        "userToken": { "type": "String" },
-        "nick": "String",
-        "email": "String",
-        "avatarFileToken": "String",
-        "phone": "String",
-        "description": "String",
-        "homepage": "String",
-        "gender": "Number",
-        "birthday": "Date",
-        "createdOn": "Date",
-        "updatedOn": "Date"
-      },
-      "options": { "collection": "user" }
+      "userToken": { "type": "String" },
+      "nick": "String",
+      "email": "String",
+      "avatarFileToken": "String",
+      "phone": "String",
+      "description": "String",
+      "homepage": "String",
+      "gender": "Number",
+      "birthday": "Date",
+      "createdOn": "Date",
+      "updatedOn": "Date"
     },
-    "team":
+    "options": { "collection": "user" }
+  },
+  "team":
+  {
+    "model":
     {
-      "model":
-      {
-        "nick": "String",
-        "email": "String",
-        "avatarFileToken": "String",
-        "phone": "String",
-        "description": "String",
-        "homepage": "String",
-        "users": [{ "userToken": "String", "role": "String" }]
-      },
-      "options": { "collection": "team" }
-    }
+      "nick": "String",
+      "email": "String",
+      "avatarFileToken": "String",
+      "phone": "String",
+      "description": "String",
+      "homepage": "String",
+      "users": [{ "userToken": "String", "role": "String" }]
+    },
+    "options": { "collection": "team" }
   }
 }

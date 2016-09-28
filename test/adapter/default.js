@@ -54,13 +54,8 @@ describe('Test default value', () => {
         assert.equal(
           data.key, 'key1', 'get default value for post.key')
         assert.equal(
-          data.complexTitle.key,
-          'test',
-          'get default value for post.complexTitle.key'
-        )
-        assert.equal(
           data.getNewTitle(),
-          `${post.title}_test`,
+          `${post.title}_new`,
           'call getNewTitle method'
         )
 

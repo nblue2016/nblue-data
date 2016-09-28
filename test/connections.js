@@ -28,10 +28,10 @@ proxies.
         const conns = createConnFunc(proxy)
 
         conns.
-        createByConfig('conn1', config).
-        then((conn) => conns.close(conn.Name)).
-        then(() => done()).
-        catch((err) => done(err))
+          createByConfig('conn1', config).
+          then((conn) => conns.close(conn.Name)).
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('Test connection string1 again', function (done) {
@@ -40,10 +40,10 @@ proxies.
         const conns = createConnFunc(proxy)
 
         conns.
-        createByConfig('conn1', config).
-        then((conn) => conns.close(conn.Name)).
-        then(() => done()).
-        catch((err) => done(err))
+          createByConfig('conn1', config).
+          then((conn) => conns.close(conn.Name)).
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('Test connection string4', function (done) {
@@ -52,10 +52,10 @@ proxies.
         const conns = createConnFunc(proxy)
 
         conns.
-        createByConfig('conn4', config).
-        then((conn) => conns.close(conn.Name)).
-        then(() => done()).
-        catch((err) => done(err))
+          createByConfig('conn4', config).
+          then((conn) => conns.close(conn.Name)).
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('Test connection string5, auth failed', function (done) {
@@ -64,9 +64,9 @@ proxies.
         const conns = createConnFunc(proxy)
 
         conns.
-        createByConfig('conn5', config).
-        then((conn) => done(new Error('unexpected open'))).
-        catch((err) => done(err.code === 18 ? null : err))
+          createByConfig('conn5', config).
+          then((conn) => done(new Error('unexpected open'))).
+          catch((err) => done(err.code === 18 ? null : err))
       })
 
       it('Test all connections', function (done) {
@@ -91,40 +91,40 @@ proxies.
         })
 
         conns.
-        createByConfigs(config).
-        then((data) => {
-          assert.equal(opened.length, 5, '5 conns were opened')
+          createByConfigs(config).
+          then((data) => {
+            assert.equal(opened.length, 5, '5 conns were opened')
 
-          assert.equal(connected.length, 2, '2 conns were connected')
-          assert.equal(connected.includes('conn4'), true, 'conn4 was created')
-          assert.equal(
-            connected.includes('conn1') ||
-              connected.includes('conn2') ||
-              connected.includes('conn3'),
-            true,
-            'conn1, conn2 or conn3 was created')
+            assert.equal(connected.length, 2, '2 conns were connected')
+            assert.equal(connected.includes('conn4'), true, 'conn4 was created')
+            assert.equal(
+              connected.includes('conn1') ||
+                connected.includes('conn2') ||
+                connected.includes('conn3'),
+              true,
+              'conn1, conn2 or conn3 was created')
 
-          assert.equal(
-            data[data.length - 1],
-            null,
-            'conn5 should be null reference')
-        }).
-        then(() => conns.closeAll()).
-        then(() => {
-          assert.equal(disconnected.length, 2, '2 conns were disconnected')
-          assert.equal(
-            disconnected.includes('conn1') ||
-              disconnected.includes('conn2') ||
-              disconnected.includes('conn3'),
-            true,
-            'conn1, conn2 or conn3 was disconnected')
-          assert.equal(
-            disconnected.includes('conn4'), true, 'conn4 was disconnected')
-          assert.equal(closed.length, 4, '4 conns were closed')
+            assert.equal(
+              data[data.length - 1],
+              null,
+              'conn5 should be null reference')
+          }).
+          then(() => conns.closeAll()).
+          then(() => {
+            assert.equal(disconnected.length, 2, '2 conns were disconnected')
+            assert.equal(
+              disconnected.includes('conn1') ||
+                disconnected.includes('conn2') ||
+                disconnected.includes('conn3'),
+              true,
+              'conn1, conn2 or conn3 was disconnected')
+            assert.equal(
+              disconnected.includes('conn4'), true, 'conn4 was disconnected')
+            assert.equal(closed.length, 4, '4 conns were closed')
 
-          done()
-        }).
-        catch((err) => done(err))
+            done()
+          }).
+          catch((err) => done(err))
       })
     })
   })

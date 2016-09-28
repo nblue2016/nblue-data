@@ -28,7 +28,7 @@ before(function (done) {
 })
 
 describe('test validation for entity', () => {
-  const validatorError = new Error('type error')
+  const validatorError = new Error('validator failed')
 
   let postAdapter = null
 
@@ -38,9 +38,9 @@ describe('test validation for entity', () => {
 
     // clear old data
     postAdapter.
-            delete({}).
-            then(() => done()).
-            catch((err) => done(err))
+      delete({}).
+      then(() => done()).
+      catch((err) => done(err))
   })
 
   it('test invalid model key function', (done) => {
@@ -63,22 +63,25 @@ describe('test validation for entity', () => {
   })
 
   it('test require key', (done) => {
-    postAdapter.create({
-      viewCount: 20,
-      likeCount: 20
-    }).then(() => {
-      done(validatorError)
-    }).
-    catch((err) => {
-      if (err instanceof ValidatorError &&
-          err.Properties.has('title')) {
-        done()
+    postAdapter.
+      create({
+        viewCount: 20,
+        likeCount: 20
+      }).
+      then(() => {
+        console.log('a')
+        done(validatorError)
+      }).
+      catch((err) => {
+        if (err instanceof ValidatorError &&
+            err.Properties.has('title')) {
+          done()
 
-        return
-      }
+          return
+        }
 
-      done(err)
-    })
+        done(err)
+      })
   })
 
   it('test limit key', (done) => {
@@ -93,6 +96,67 @@ describe('test validation for entity', () => {
     catch((err) => {
       if (err instanceof ValidatorError &&
           err.Properties.has('key')) {
+        done()
+
+        return
+      }
+
+      done(err)
+    })
+  })
+
+  it('test limit of range function', (done) => {
+    postAdapter.create({
+      title: 'test_title',
+      viewCount: 50,
+      likeCount: 20
+    }).then(() => {
+      done(validatorError)
+    }).
+    catch((err) => {
+      if (err instanceof ValidatorError &&
+          err.Properties.has('viewCount')) {
+        done()
+
+        return
+      }
+
+      done(err)
+    })
+  })
+
+  it('test limit of email', (done) => {
+    postAdapter.create({
+      title: 'test_title',
+      email: 'aa2.abc.com',
+      viewCount: 20,
+      likeCount: 20
+    }).then(() => {
+      done(validatorError)
+    }).
+    catch((err) => {
+      if (err instanceof ValidatorError &&
+          err.Properties.has('email')) {
+        done()
+
+        return
+      }
+
+      done(err)
+    })
+  })
+
+  it('test size', (done) => {
+    postAdapter.create({
+      title: 'abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz',
+      viewCount: 20,
+      likeCount: 20
+    }).then(() => {
+      done(validatorError)
+    }).
+    catch((err) => {
+      if (err instanceof ValidatorError &&
+          err.Properties.has('title')) {
         done()
 
         return
@@ -168,31 +232,33 @@ describe('test validation for entity', () => {
   })
 
   it('test invalid string type in complex properties', (done) => {
-    postAdapter.create({
-      title: 'test_title',
-      complexTitle: {
-        title: 1232
-      },
-      status: 4
-    }).then(() => {
-      done(validatorError)
-    }).
-    catch((err) => {
-      if (err instanceof ValidatorError &&
-          err.Properties.has('complexTitle.title')) {
-        return postAdapter.create({
-          title: 'test_title',
-          complexTitle: {
-            title: 'sub_test_title'
-          },
-          status: 4
-        })
-      }
+    postAdapter.
+      create({
+        title: 'test_title',
+        complexKey: {
+          title: 1232
+        },
+        status: 4
+      }).
+      then(() => {
+        done(validatorError)
+      }).
+      catch((err) => {
+        if (err instanceof ValidatorError &&
+            err.Properties.has('complexKey.title')) {
+          return postAdapter.create({
+            title: 'test_title',
+            complexKey: {
+              key1: 'sub_test_key'
+            },
+            status: 4
+          })
+        }
 
-      return done(err)
-    }).
-    then(() => done()).
-    catch((err) => done(err))
+        return done(err)
+      }).
+      then(() => done()).
+      catch((err) => done(err))
   })
 
   after(() => {

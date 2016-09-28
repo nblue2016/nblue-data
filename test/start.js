@@ -8,11 +8,12 @@ const Schemas = dataLib.Schemas
 
 // parse schema files
 const schemas = Schemas.create()
-const schemaFiles = ['blog.json', 'blog._js', 'northwind.json']
+const schemaFiles = ['blog.json', 'blog.js', 'northwind.json']
+// const schemaFiles = ['blog.js', 'blog.json']
 
 schemaFiles.
   map((file) => path.join(__dirname, 'schemas', file)).
-  map((file) => schemas.defineSync(file))
+  map((file) => schemas.readFileSync(file))
 
 if (!global.schemas) global.schemas = schemas.Cache
 

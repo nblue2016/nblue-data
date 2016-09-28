@@ -37,27 +37,24 @@ describe('schemas', () => {
     assert.equal(mapped.has('status'), true, 'found property of status')
     assert.equal(mapped.has('viewCount'), true, 'found property of viewCount')
     assert.equal(mapped.has('likeCount'), true, 'found property of likeCount')
+    assert.equal(mapped.has('CanComment'), true, 'found property of CanComment')
+
+    assert.equal(model.abstract.type, 'string', 'type property of abstract')
+    assert.equal(model.content.type, 'string', 'type property of content')
+    assert.equal(model.tags.type, 'string', 'type property of tags')
     assert.equal(
-      mapped.has('CanComment'), true, 'found property of CanComment')
+      model.publishedOn.type, 'date', 'found property of publishedOn')
 
-    assert.deepEqual(
-      model.title,
-      {
-        type: 'String',
-        require: true
-      },
-      'type property of title')
-    assert.equal(model.abstract, 'String', 'type property of abstract')
-    assert.equal(model.content, 'String', 'type property of content')
-    assert.deepEqual(model.tags, ['String'], 'type property of tags')
-    assert.deepEqual(
-      model.publishedOn.type, 'Date', 'found property of publishedOn')
-
-    assert.equal(model.publishedBy, 'String', 'type property of publishedBy')
-    assert.equal(model.status, 'Number', 'type property of status')
-    assert.equal(model.viewCount, 'Number', 'type property of viewCount')
-    assert.equal(model.likeCount, 'Number', 'type property of likeCount')
-    assert.equal(model.CanComment, 'Boolean', 'type property of CanComment')
+    assert.equal(
+      model.publishedBy.type, 'string', 'type property of publishedBy')
+    assert.equal(
+      model.status.type, 'number', 'type property of status')
+    assert.equal(
+      model.viewCount.type, 'number', 'type property of viewCount')
+    assert.equal(
+      model.likeCount.type, 'number', 'type property of likeCount')
+    assert.equal(
+      model.CanComment.type, 'boolean', 'type property of CanComment')
   })
 
   it('User object', () => {
