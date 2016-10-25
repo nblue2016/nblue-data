@@ -1,7 +1,5 @@
 const assert = require('assert')
-
 const schemas = global.schemas
-
 
 describe('schemas', () => {
   it('Loadded objects', () => {

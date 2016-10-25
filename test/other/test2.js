@@ -6,11 +6,11 @@ const dataLib = require('../lib')
 // const Mongoose = require('mongoose')
 const ConfigMap = global.ConfigMap
 const Proxy = dataLib.MongoDbProxy
-// const Proxy = dataLib.MongooseProxy
+const OrmProxy = dataLib.OrmDbProxy
 const DbConnections = dataLib.DbConnections
 
 // parse configuration file
-const configFile = String.format('%s/config.yml', __dirname)
+const configFile = String.format('%s/config2.yml', __dirname)
 const config = ConfigMap.
   parseConfigSync(configFile, ['dev', 'debug', 'qa'])
 
@@ -19,6 +19,8 @@ if (!global.config) global.config = config
 const conns = new DbConnections()
 
 conns.registerProxy('mongodb:', new Proxy())
+conns.registerProxy('sqlite:', new OrmProxy())
+conns.registerProxy('mysql:', new OrmProxy())
 
 conns.on('open', (name) => {
   console.log(`open ${name}`)
@@ -44,6 +46,16 @@ conns.
   createByConfigs(config).
   then(() => {
     console.log('created all')
+
+    const conn = conns.get('conn1')
+
+    console.log(`get conn: ${conn.Name}`)
+
+    const proxy = conn.Proxy
+    const adapter = proxy.createAdapter('post', conn)
+
+    console.log(adapter)
+
 
     return conns.closeAll()
   }).

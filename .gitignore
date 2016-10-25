@@ -39,7 +39,7 @@ jspm_packages
 # Configuration files
 *.debug.yml
 *.release.yml
-*.qa.yml
-*.dev.yml
-*.uat.yml
-*.prod.yml
+# *.qa.yml
+# *.dev.yml
+# *.uat.yml
+# *.prod.yml

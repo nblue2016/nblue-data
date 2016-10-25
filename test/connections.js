@@ -22,6 +22,11 @@ proxies.
     const Proxy = proxy
 
     describe(`Test connections with ${Proxy.name}`, () => {
+      before('before', (done) => {
+        // console.log('before')
+        done()
+      })
+
       it('Test connection string1', function (done) {
         this.timeout(timeoutValue)
 
@@ -61,12 +66,22 @@ proxies.
       it('Test connection string5, auth failed', function (done) {
         this.timeout(timeoutValue)
 
+        const callback = () => null
         const conns = createConnFunc(proxy)
+
+        process.on('unhandledRejection', callback)
 
         conns.
           createByConfig('conn5', config).
           then((conn) => done(new Error('unexpected open'))).
-          catch((err) => done(err.code === 18 ? null : err))
+          catch((err) => {
+            done(err.code === 18 ? null : err)
+          }).
+          finally(() => {
+            setTimeout(() => {
+              process.removeListener('unhandledRejection', callback)
+            }, 500)
+          })
       })
 
       it('Test all connections', function (done) {

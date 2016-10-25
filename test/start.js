@@ -1,11 +1,59 @@
-require('nblue')
+const nblue = require('nblue')
 
 const path = require('path')
-const dataLib = require('../lib')
+const betch = nblue.betch
+
+const nblueData = require('../lib')
 
 const ConfigMap = global.ConfigMap
-const Schemas = dataLib.Schemas
+const Schemas = nblueData.Schemas
 
+// define test script files
+const testScripts = [
+  './connections',
+  './schema',
+  '#./adapter/crud',
+  '#./adapter/default',
+  '#./adapter/validator'
+]
+
+const files = ['blog.json', 'blog.js', 'northwind.json'].
+  map(
+    (file) => path.join(__dirname, 'schemas', file)
+  )
+
+const configFile = String.format('%s/config.yml', __dirname)
+
+describe('Init envirnment', () => {
+  before('', (done) => {
+    const ctx = {}
+
+    betch({
+      cf: ConfigMap.parseConfigSync(
+            configFile,
+            ['dev', 'debug', 'qa']
+          ),
+      sc: Schemas.parse(files)
+    }, ctx).
+    then(() => {
+      global.config = ctx.cf
+      global.schemas = ctx.sc.Cache
+
+      done()
+    }).
+    catch((err) => done(err))
+  })
+
+  it('', () => {
+    for (const script of testScripts) {
+      if (script.startsWith('#')) continue
+
+      require(script)
+    }
+  })
+})
+
+/*
 // parse schema files
 const schemas = Schemas.create()
 const schemaFiles = ['blog.json', 'blog.js', 'northwind.json']
@@ -22,19 +70,4 @@ const configFile = String.format('%s/config.yml', __dirname)
 const config = ConfigMap.parseConfigSync(configFile, ['dev', 'debug', 'qa'])
 
 if (!global.config) global.config = config
-
-// define test script files
-const testScripts = [
-  './connections',
-  './schema',
-  './adapter/crud',
-  './adapter/default',
-  './adapter/validator'
-]
-
-// start to test
-for (const script of testScripts) {
-  if (script.startsWith('#')) continue
-
-  require(script)
-}
+*/
