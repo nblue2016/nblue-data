@@ -36,7 +36,7 @@
       "createdOn": "Date",
       "updatedOn": "Date"
     },
-    "options": { "collection": "user" }
+    "options": { "collection": "user2" }
   },
   "team":
   {
@@ -50,6 +50,10 @@
       "homepage": "String",
       "users": [{ "userToken": "String", "role": "String" }]
     },
-    "options": { "collection": "team" }
+    "options": {
+      "database":"conn3",
+      "collection": "team",
+      "table": "team2"
+    }
   }
 }

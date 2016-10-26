@@ -4,65 +4,39 @@ schemas({
   },
   post: {
     model: {
-      title: {
-        type: 'String',
-        require: true
+      title: String,
+      key: String,
+      complexKey: {
+        key1: String,
+        key2: String
       },
-      complexTitle: {
-        title: 'String',
-        key: {
-          type: 'String',
-          default: 'test'
-        }
-      },
-      key: {
-        type: 'String',
-        require: true,
-        default: 'key1',
-        limit: ['key1', 'key2']
-      },
+      complexKey2: String,
+      size: Number,
       abstract: 'String',
-      content: 'String',
-      tags: ['String'],
-      publishedOn: {
-        type: 'Date',
-        default () {
-          return new Date()
-        }
-      },
-      publishedBy: 'String',
-      status: 'Number',
-      viewCount: 'Number',
-      likeCount: 'Number',
-      CanComment: 'Boolean'
+      data: Buffer,
+      content: String,
+      tags: [String],
+      publishedOn: Buffer,
+      publishedBy: String,
+      email: String,
+      status: Number,
+      viewCount: Number,
+      likeCount: Number,
+      CanComment: Boolean
     },
     options: {
       collection: 'post',
       wrapper: {
-        to: (post) => {
-          post.tags = ['test']
-
-          return post
-        },
-        from: (post) => {
-          post.tags = ['wrapped']
-
-          return post
-        }
+        to: (item) => item,
+        from: (item) => item
       },
       methods: {
         getNewTitle () {
-          return `${this.title}_test`
+          return `${this.title}_new`
         }
       },
-      validate (post) {
-        this.autoValidate(post)
+      hook: {
 
-        if (post.content) {
-          if (post.content.length <= 10) {
-            throw new Error('less length of content')
-          }
-        }
       }
     }
   }

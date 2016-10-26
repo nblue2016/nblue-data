@@ -1,10 +1,12 @@
 ---
   rules:
     # disable some rules for test
-    max-statements: [2, 50]
+    max-statements: [2, 200]
     no-console: 0
     no-magic-numbers: 0
     no-unused-vars: [2, { args: "none", caughtErrors: "none" }]
     no-underscore-dangle: 0
+    id-length: 0
+    no-plusplus: 0
     consistent-this: 0
     global-require: 0

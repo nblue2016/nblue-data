@@ -10,8 +10,8 @@ const Schemas = nblueData.Schemas
 
 // define test script files
 const testScripts = [
-  './connections',
   './schema',
+  './connections',
   '#./adapter/crud',
   '#./adapter/default',
   '#./adapter/validator'
@@ -24,7 +24,7 @@ const files = ['blog.json', 'blog.js', 'northwind.json'].
 
 const configFile = String.format('%s/config.yml', __dirname)
 
-describe('Init envirnment', () => {
+describe('init envirnment', () => {
   before('', (done) => {
     const ctx = {}
 
@@ -52,22 +52,3 @@ describe('Init envirnment', () => {
     }
   })
 })
-
-/*
-// parse schema files
-const schemas = Schemas.create()
-const schemaFiles = ['blog.json', 'blog.js', 'northwind.json']
-// const schemaFiles = ['blog.js', 'blog.json']
-
-schemaFiles.
-  map((file) => path.join(__dirname, 'schemas', file)).
-  map((file) => schemas.readFileSync(file))
-
-if (!global.schemas) global.schemas = schemas.Cache
-
-// parse configuration file
-const configFile = String.format('%s/config.yml', __dirname)
-const config = ConfigMap.parseConfigSync(configFile, ['dev', 'debug', 'qa'])
-
-if (!global.config) global.config = config
-*/

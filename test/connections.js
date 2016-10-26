@@ -1,13 +1,67 @@
-const assert = require('assert')
-const dataLib = require('../lib')
+// const assert = require('assert')
+const nblue = require('nblue')
+const ndata = require('../lib')
+
+const ConfigMap = nblue.ConfigMap
+const DbConnections = ndata.DbConnections
+
+const envs = ['dev', 'debug', 'qa']
+
+describe('connections - create methods', () => {
+  let config = null
+
+  before((done) => {
+    const configFile = String.format('%s/config.yml', __dirname)
+
+    ConfigMap.
+      parseConfig(configFile, envs).
+      then((data) => {
+        config = data
+
+        done()
+      }).
+      catch((err) => done(err))
+  })
+
+  it('Test method of createByConfig by promise', function (done) {
+    this.timeout(2000)
+
+    const conns = new DbConnections()
+    const conn = conns.createByConfig('conn1', config)
+
+    conn.
+      open().
+      then((data) => conn.close()).
+      then(() => done()).
+      catch((err) => done(err))
+  })
+
+  it('Test method of createByConfig by callback', function (done) {
+    this.timeout(2000)
+
+    const conns = new DbConnections()
+    const conn = conns.createByConfig('conn1', config)
+
+    conn.open((err) => {
+      if (err) done(err)
+      else {
+        conn.close((err2) => {
+          if (err) done(err2)
+          else done()
+        })
+      }
+    })
+  })
+})
 
 
-const DbConnections = dataLib.DbConnections
+/*
+const DbConnections = ndata.DbConnections
 const timeoutValue = 15000
 
 const config = global.config
 
-const proxies = [dataLib.MongoDbProxy, dataLib.MongooseProxy]
+const proxies = [ndata.MongoDbProxy, ndata.MongooseProxy]
 const createConnFunc = (proxy) => {
   const Proxy = proxy
   const conns = new DbConnections()
@@ -143,3 +197,4 @@ proxies.
       })
     })
   })
+*/

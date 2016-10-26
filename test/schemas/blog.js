@@ -17,6 +17,7 @@ schemas({
       complexKey: {
         key1: String,
         key2: {
+          $size: 30,
           $default: 'key22'
         }
       },
@@ -24,6 +25,7 @@ schemas({
         $default: 'a'
       },
       size: {
+        $type: Number,
         $limit: range(1, 20000)
       },
       abstract: 'String',
