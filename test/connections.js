@@ -1,4 +1,4 @@
-// const assert = require('assert')
+const assert = require('assert')
 const nblue = require('nblue')
 const ndata = require('../lib')
 
@@ -23,178 +23,229 @@ describe('connections - create methods', () => {
       catch((err) => done(err))
   })
 
-  it('Test method of createByConfig by promise', function (done) {
-    this.timeout(2000)
+  const ary = [0, 1]
+  const proxies = [ndata.MongoDbProxy, ndata.MongooseProxy]
 
-    const conns = new DbConnections()
-    const conn = conns.createByConfig('conn1', config)
+  ary.forEach((index) => {
+    const proxyName = index === 0 ? 'MongoDb' : 'Mongoose'
 
-    conn.
-      open().
-      then((data) => conn.close()).
-      then(() => done()).
-      catch((err) => done(err))
-  })
+    it(`Test method of create by promise (${proxyName})`,
+      function (done) {
+        this.timeout(2000)
 
-  it('Test method of createByConfig by callback', function (done) {
-    this.timeout(2000)
+        const conns = new DbConnections()
+        const cs = config.getConnectionString('conn1')
 
-    const conns = new DbConnections()
-    const conn = conns.createByConfig('conn1', config)
+        conns.create('test', cs)
 
-    conn.open((err) => {
-      if (err) done(err)
-      else {
-        conn.close((err2) => {
-          if (err) done(err2)
-          else done()
-        })
-      }
-    })
-  })
-})
+        assert.throws(
+          () => conns.create('test', cs),
+          'duplication connection name'
+        )
 
-
-/*
-const DbConnections = ndata.DbConnections
-const timeoutValue = 15000
-
-const config = global.config
-
-const proxies = [ndata.MongoDbProxy, ndata.MongooseProxy]
-const createConnFunc = (proxy) => {
-  const Proxy = proxy
-  const conns = new DbConnections()
-
-  conns.registerProxy('mongodb:', new Proxy())
-
-  return conns
-}
-
-proxies.
-  forEach((proxy) => {
-    const Proxy = proxy
-
-    describe(`Test connections with ${Proxy.name}`, () => {
-      before('before', (done) => {
-        // console.log('before')
-        done()
-      })
-
-      it('Test connection string1', function (done) {
-        this.timeout(timeoutValue)
-
-        const conns = createConnFunc(proxy)
-
+        conns.registerProxy('mongodb:', proxies[index])
         conns.
-          createByConfig('conn1', config).
-          then((conn) => conns.close(conn.Name)).
-          then(() => done()).
-          catch((err) => done(err))
-      })
-
-      it('Test connection string1 again', function (done) {
-        this.timeout(timeoutValue)
-
-        const conns = createConnFunc(proxy)
-
-        conns.
-          createByConfig('conn1', config).
-          then((conn) => conns.close(conn.Name)).
-          then(() => done()).
-          catch((err) => done(err))
-      })
-
-      it('Test connection string4', function (done) {
-        this.timeout(timeoutValue)
-
-        const conns = createConnFunc(proxy)
-
-        conns.
-          createByConfig('conn4', config).
-          then((conn) => conns.close(conn.Name)).
-          then(() => done()).
-          catch((err) => done(err))
-      })
-
-      it('Test connection string5, auth failed', function (done) {
-        this.timeout(timeoutValue)
-
-        const callback = () => null
-        const conns = createConnFunc(proxy)
-
-        process.on('unhandledRejection', callback)
-
-        conns.
-          createByConfig('conn5', config).
-          then((conn) => done(new Error('unexpected open'))).
-          catch((err) => {
-            done(err.code === 18 ? null : err)
-          }).
-          finally(() => {
-            setTimeout(() => {
-              process.removeListener('unhandledRejection', callback)
-            }, 500)
-          })
-      })
-
-      it('Test all connections', function (done) {
-        this.timeout(timeoutValue * 3)
-
-        const conns = createConnFunc(proxy)
-
-        const opened = []
-        const connected = []
-        const disconnected = []
-        const closed = []
-
-        conns.on('open', (name) => opened.push(name))
-        conns.on('connected', (name) => connected.push(name))
-        conns.on('disconnected', (name) => disconnected.push(name))
-        conns.on('close', (name) => closed.push(name))
-
-        conns.on('error', (err) => {
-          if (err.code === 18) return
-
-          done(err)
-        })
-
-        conns.
-          createByConfigs(config).
-          then((data) => {
-            assert.equal(opened.length, 5, '5 conns were opened')
-
-            assert.equal(connected.length, 2, '2 conns were connected')
-            assert.equal(connected.includes('conn4'), true, 'conn4 was created')
-            assert.equal(
-              connected.includes('conn1') ||
-                connected.includes('conn2') ||
-                connected.includes('conn3'),
-              true,
-              'conn1, conn2 or conn3 was created')
-
-            assert.equal(
-              data[data.length - 1],
-              null,
-              'conn5 should be null reference')
-          }).
-          then(() => conns.closeAll()).
+          open('test').
           then(() => {
-            assert.equal(disconnected.length, 2, '2 conns were disconnected')
-            assert.equal(
-              disconnected.includes('conn1') ||
-                disconnected.includes('conn2') ||
-                disconnected.includes('conn3'),
-              true,
-              'conn1, conn2 or conn3 was disconnected')
-            assert.equal(
-              disconnected.includes('conn4'), true, 'conn4 was disconnected')
-            assert.equal(closed.length, 4, '4 conns were closed')
+            const conn = conns.getConnection('test')
+
+            assert.ok(conn, 'get connection')
+            assert.ok(conn.IsOpened, 'connection was opend')
+            assert.ok(conn.Instance, 'connection was created')
+            assert.equal(conn.Name, 'test', 'get connection name')
+
+            return conns.close('test')
+          }).
+          then(() => {
+            const conn = conns.getConnection('test')
+
+            assert.ok(conn, 'get connection')
+            assert.ok(!conn.IsOpened, 'connection was closed')
+            assert.ok(!conn.Instance, 'connection was released')
+            assert.equal(conn.Name, 'test', 'get connection name')
 
             done()
           }).
           catch((err) => done(err))
       })
-    })
+
+    it(`Test method of create by callback (${proxyName})`,
+      function (done) {
+        this.timeout(2000)
+
+        const conns = new DbConnections()
+        const cs = config.getConnectionString('conn1')
+
+        conns.create('test', cs)
+
+        conns.registerProxy('mongodb:', proxies[index])
+        conns.open('test', (err) => {
+          if (err) done(err)
+          else {
+            conns.close('test', (err2) => {
+              if (err2) done(err2)
+              else done()
+            })
+          }
+        })
+      })
+
+    it(`Test method of create handle event (${proxyName})`,
+      function (done) {
+        this.timeout(2000)
+
+        const conns = new DbConnections()
+        const cs = config.getConnectionString('conn1')
+        let opened = false
+
+        conns.create('test', cs)
+        conns.registerProxy('mongodb:', proxies[index])
+
+        conns.on('error', (err, name) => {
+          if (name === 'test') done(err)
+        })
+        conns.on('open', (name) => {
+          if (name === 'test') opened = true
+        })
+        conns.on('close', (name) => {
+          assert.ok(opened, 'database has been opened')
+
+          if (name === 'test') done()
+        })
+
+        conns.
+          open('test').
+          then(() => conns.close('test'))
+      })
+
+    it(`Test method of createByConfig by promise (${proxyName})`,
+      function (done) {
+        this.timeout(2000)
+
+        const conns = new DbConnections()
+        const conn = conns.createByConfig('conn1', config)
+
+        conns.registerProxy('mongodb:', proxies[index])
+
+        conn.
+        open().
+        then((data) => conn.close()).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
+    it(`Test method of createByConfig by callback (${proxyName})`,
+      function (done) {
+        this.timeout(2000)
+
+        const conns = new DbConnections()
+        const conn = conns.createByConfig('conn1', config)
+
+        conns.registerProxy('mongodb:', proxies[index])
+
+        conn.open((err) => {
+          if (err) done(err)
+          else {
+            conn.close((err2) => {
+              if (err2) done(err2)
+              else done()
+            })
+          }
+        })
+      })
+
+    it(`Test method of createByConfigs then open with error (${proxyName})`,
+      function (done) {
+        this.timeout(2000)
+
+        const conns = new DbConnections()
+
+        conns.createByConfigs(config)
+
+        conns.
+            open('conn5').
+            then(() => done(new Error('connection string is incorrect.'))).
+            catch((err) => {
+              assert.equal(err.code, 18, 'auth failed for conn5b')
+
+              return conns.close('conn5')
+            }).
+            then(() => done()).
+            catch((err) => done(err))
+      })
+
+    it(`Test method of createByConfigs then openAll with error (${proxyName})`,
+      function (done) {
+        this.timeout(5000)
+
+        const conns = new DbConnections()
+
+        conns.createByConfigs(config)
+
+        conns.on('error', (err, name) => {
+          assert.equal(name, 'conn5', 'auth failed for conn5a')
+          assert.equal(err.code, 18, 'auth failed for conn5b')
+        })
+
+        conns.
+          openAll().
+          catch((err) => {
+            const errs = err.details
+
+            assert.ok(errs, 'get errors')
+            assert.ok(errs.conn5, 'get errors for conn5')
+            assert.equal(errs.conn5.code, 18, 'get error code for conn5')
+
+            return null
+          }).
+          finally(() => {
+            const conn1 = conns.getConnection('conn1')
+            const conn2 = conns.getConnection('conn2')
+            const conn3 = conns.getConnection('conn3')
+            const conn4 = conns.getConnection('conn4')
+            const conn5 = conns.getConnection('conn5')
+
+            assert.ok(conn1.IsOpened, 'conn1 was opened')
+            assert.ok(conn2.IsOpened, 'conn2 was opened')
+            assert.ok(conn3.IsOpened, 'conn3 was opened')
+            assert.ok(conn4.IsOpened, 'conn4 was opened')
+            assert.ok(!conn5.IsOpened, 'conn5 was opened')
+
+            return conns.closeAll()
+          }).
+          then(() => done()).
+          catch((err) => done(err)).
+          finally(() => console.log(' '))
+      })
   })
-*/
+})
+
+describe('connections - orm', () => {
+  let config = null
+
+  before((done) => {
+    const configFile = String.format('%s/config2.yml', __dirname)
+
+    ConfigMap.
+      parseConfig(configFile, envs).
+      then((data) => {
+        config = data
+
+        done()
+      }).
+      catch((err) => done(err))
+  })
+
+  it('Test method of create by promise (ORM2 Driver)', (done) => {
+    const conns = new DbConnections()
+    const cs = config.getConnectionString('conn1')
+
+    conns.create('test', cs)
+
+    conns.
+      open('test').
+      then(() => conns.close('test')).
+      then(() => done()).
+      catch((err) => done(err))
+  })
+})
