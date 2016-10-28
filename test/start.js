@@ -10,8 +10,9 @@ const Schemas = nblueData.Schemas
 
 // define test script files
 const testScripts = [
-  './schema',
-  './connections',
+  '#./schema',
+  '#./connections',
+  './adapter/test',
   '#./adapter/crud',
   '#./adapter/default',
   '#./adapter/validator'

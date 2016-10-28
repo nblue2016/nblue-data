@@ -1,15 +1,15 @@
 const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
-const dataLib = require('../../lib')
+const ndata = require('../../lib')
 
 const aq = global.aq
 const config = global.config
-const DbConnections = dataLib.DbConnections
+const DbConnections = ndata.DbConnections
 
 const timeOutValue = 5000
 
-const proxies = [dataLib.MongoDbProxy, dataLib.MongooseProxy]
+const proxies = [ndata.MongoDbProxy, ndata.MongooseProxy]
 const createConnFunc = (proxy) => {
   const Proxy = proxy
   const conns = new DbConnections()
