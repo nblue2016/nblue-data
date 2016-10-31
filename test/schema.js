@@ -235,6 +235,7 @@ describe('schemas - parse files', () => {
       parse(files).
       then((data) => {
         ss = data
+
         done()
       }).
       catch((err) => done(err))
@@ -242,10 +243,10 @@ describe('schemas - parse files', () => {
 
   it('Test all entities in schemas', () => {
     const keys = ss.Keys
-    const entityKeys = ['post', 'user', 'team', 'category', 'customer']
+    const entityKeys = ['category', 'customer', 'post', 'team', 'user']
 
     assert.equal(keys.length, entityKeys.length, 'length of objects')
-    assert.deepEqual(keys, entityKeys, 'values in objects')
+    assert.deepEqual(keys.sort(), entityKeys, 'values in objects')
   })
 
   it('Test post entity in schemas', () => {

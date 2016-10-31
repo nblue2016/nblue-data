@@ -52,9 +52,9 @@ describe('Create Adapter', () => {
 
       betch({
         _open: conns.open('conn1'),
-        adapter: conns.getAdapter('conn1', 'post'),
-        post: (ctx$) => ctx$.adapter.create({ title: 'test1' }),
-        _del: (ctx$) => ctx$.adapter.delete({ _id: ctx$.post._id }),
+        adapter: () => conns.getAdapter('conn1', 'post'),
+        post: (cx) => cx.adapter.create({ title: 'test1' }),
+        _del: (cx) => cx.adapter.delete({ _id: cx.post._id }),
         _end: conns.close('conn1')
       }, ctx).
       then((data) => done()).

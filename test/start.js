@@ -1,31 +1,34 @@
-const nblue = require('nblue')
+// const nblue = require('nblue')
 
-const path = require('path')
-const betch = nblue.betch
+// const path = require('path')
+// const betch = nblue.betch
 
-const nblueData = require('../lib')
+// const ndata = require('../lib')
 
-const ConfigMap = global.ConfigMap
-const Schemas = nblueData.Schemas
+// const ConfigMap = global.ConfigMap
+// const Schemas = nblueData.Schemas
 
 // define test script files
 const testScripts = [
   '#./schema',
   '#./connections',
-  './adapter/test',
-  '#./adapter/crud',
+  './adapter/crud',
   '#./adapter/default',
   '#./adapter/validator'
 ]
 
+/*
 const files = ['blog.json', 'blog.js', 'northwind.json'].
   map(
     (file) => path.join(__dirname, 'schemas', file)
   )
 
 const configFile = String.format('%s/config.yml', __dirname)
+*/
 
 describe('init envirnment', () => {
+
+  /*
   before('', (done) => {
     const ctx = {}
 
@@ -44,8 +47,9 @@ describe('init envirnment', () => {
     }).
     catch((err) => done(err))
   })
+  */
 
-  it('', () => {
+  it('exec scripts', () => {
     for (const script of testScripts) {
       if (script.startsWith('#')) continue
 
