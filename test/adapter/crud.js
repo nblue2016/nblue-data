@@ -112,10 +112,11 @@ describe('adapter - init ', () => {
       const insertedPosts = []
 
       let
-        catagoryAdapter = null,
+        categoryAdapter = null,
         conns = null,
         postAdapter = null,
-        userAdapter = null
+        userAdapter = null,
+        userData = null
 
       before((done) => {
         conns = new DbConnections(schemas)
@@ -127,13 +128,17 @@ describe('adapter - init ', () => {
           yield conns.openAll()
 
           // get adapters
-          catagoryAdapter = yield conns.getAdapter('category')
+          categoryAdapter = yield conns.getAdapter('category')
           postAdapter = yield conns.getAdapter('post')
           userAdapter = yield conns.getAdapter('user')
 
+          userData = JSON.parse(
+            yield aq.readFile(path.join(__dirname, 'users.json'), 'utf-8')
+          )
+
           // clear old data
           return betch([
-            catagoryAdapter.delete({}),
+            categoryAdapter.delete({}),
             postAdapter.delete({}),
             userAdapter.delete({})
           ])
@@ -281,6 +286,226 @@ describe('adapter - init ', () => {
           assert.equal(
             results.length, insertedPosts.length, 'tow entites were deleted'
           )
+        }).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
+      it('create catagory with auto increment', function (done) {
+        this.timeout(timeoutValue)
+
+        const opts = categoryAdapter.getOptions()
+        const auto = opts.autoIncrement || {}
+        const step = auto.step || 2
+        const times = 5
+
+        let
+          category = null,
+          categoryID = -1,
+          latestID = -step
+
+        co(function *() {
+          // get the category that has the maximun identity
+          category = yield categoryAdapter.
+            retrieve({}, {
+              sort: { CategoryID: -1 },
+              limit: 1
+            })
+
+          category = getEntity(category)
+          latestID = category ? category.CategoryID : 0
+
+          for (let i = 0; i < times; i++) {
+            // create new item
+            category = yield categoryAdapter.
+              create({
+                CategoryName: `test${i + 1}`,
+                Description: 'test catagory'
+              })
+
+            categoryID = latestID + step * i
+
+            // check category id with auto increament
+            assert.equal(
+              category.CategoryID, categoryID, 'get correct auto increment id'
+            )
+          }
+
+          category = yield categoryAdapter.
+            retrieve({}, {
+              sort: { CategoryID: -1 },
+              limit: 1
+            })
+          category = getEntity(category)
+
+          assert.equal(
+            category.CategoryID, step * (times - 1), 'check the latest item'
+          )
+        }).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
+      it('batch create users', (done) => {
+        co(function *() {
+          const users = yield userAdapter.create(userData)
+          const count = yield userAdapter.count({})
+
+          assert.equal(users.length, userData.length, 'created users.')
+          assert.equal(count, userData.length, 'count of users.')
+        }).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
+      it('find one by filter for users', (done) => {
+        co(function *() {
+          const user = yield userAdapter.retrieve({}, { method: 'findOne' })
+
+          assert.equal(Array.isArray(user), false, 'only found one element')
+          assert.equal(user.nick, 'test01', 'only found one element')
+        }).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
+      it('complex filter for users', (done) => {
+        let users = null
+
+        // userAdapter.SimpleData = true
+
+        co(function *() {
+          // test for all users
+          users = yield userAdapter.retrieve({})
+
+          assert.equal(users.length, 12, 'filter all users.')
+
+
+          // test for limit
+          users = yield userAdapter.retrieve({}, { limit: 8 })
+
+          assert.equal(users.length, 8, 'filter users (limit: 8).')
+
+
+          // test for top
+          users = yield userAdapter.retrieve({}, { top: 6 })
+
+          assert.equal(users.length, 6, 'filter users (top: 6).')
+
+
+          // test for filter1
+          users = yield userAdapter.retrieve({ gender: 1 })
+
+          assert.equal(users.length, 9, 'filter users (filter {gender: 1}).')
+
+
+          // test for filter2
+          users = yield userAdapter.retrieve({ gender: 2 })
+
+          assert.equal(users.length, 3, 'filter users (filter {gender: 2}).')
+
+
+          // test for filter3
+          users = yield userAdapter.retrieve({ nick: 'test08' })
+          assert.equal(
+            users[0].email,
+            'test08@abc.com',
+            'filter users (filter {nick: test08}).'
+          )
+
+
+          // test for pager settings 1
+          users = yield userAdapter.
+            retrieve({}, {
+              sort: {
+                nick: 1
+              },
+              pageSize: 3,
+              page: 2
+            })
+
+          assert.equal(users.length, 3, 'count of matched users by pager.')
+          assert.equal(users[0].nick, 'test04', 'the 1st user in page 2 ')
+          assert.equal(users[1].nick, 'test05', 'the 2nd user in page 2 ')
+          assert.equal(users[2].nick, 'test06', 'the 3rd user in page 2 ')
+
+
+          // test for pager settings 2
+          users = yield userAdapter.
+            retrieve({}, {
+              sort: {
+                nick: 1
+              },
+              pageSize: 5,
+              page: 3
+            })
+
+          assert.equal(users.length, 2, 'count of matched users by pager2.')
+          assert.equal(users[0].nick, 'test11', 'the 1st user in page 2 ')
+          assert.equal(users[1].nick, 'test12', 'the 2nd user in page 2 ')
+
+          // test for complex filter
+          users = yield userAdapter.
+            retrieve({}, {
+              projection: {
+                _id: 0,
+                nick: 1,
+                email: 1
+              },
+              sort: {
+                nick: 1
+              },
+              pageSize: 5,
+              page: 3
+            })
+
+          assert.equal(
+            users.length, 2, 'the count of matched users by complex filter.'
+          )
+
+          assert.deepEqual(
+            Object.keys(users[0]).sort(),
+            ['email', 'nick'],
+            'properties of the 1st user'
+          )
+
+          assert.deepEqual(
+            Object.keys(users[1]).sort(),
+            ['email', 'nick'],
+            'properties of the 1st user'
+          )
+        }).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
+      it('batch modified users', (done) => {
+        co(function *() {
+          const result = yield userAdapter.
+            update({
+              gender: 1
+            }, {
+              nick: 'modified'
+            })
+
+          assert.equal(result.ok, 1, 'parse ok value')
+          assert.equal(result.nModified, 9, 'parse nModified value')
+          assert.equal(result.n, 9, 'parse n value')
+
+          const users = yield userAdapter.retrieve({ nick: 'modified' })
+
+          assert.equal(users.length, 9, '9 users were updated.')
+        }).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
+      it('batch delete users', (done) => {
+        co(function *() {
+          const result = yield userAdapter.delete({ gender: 2 })
+
+          assert.equal(result.ok, 1, 'parse ok value')
+          assert.equal(result.n, 3, 'parse n value')
         }).
         then(() => done()).
         catch((err) => done(err))
