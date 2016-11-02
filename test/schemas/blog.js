@@ -18,11 +18,11 @@ schemas({
         key1: String,
         key2: {
           $size: 30,
-          $default: 'key22'
+          $default: 'ckey12'
         }
       },
       complexKey2: {
-        $default: 'a'
+        $default: 'ckey2'
       },
       size: {
         $type: Number,

@@ -21,7 +21,7 @@ describe('schemas - parse file', () => {
     catch((err) => done(err))
   })
 
-  it('Tested parsed JSON file', () => {
+  it('parsed JSON file', () => {
     const keys = ss[0].Keys
     const entityKeys = ['post', 'user', 'team']
 
@@ -48,7 +48,7 @@ describe('schemas - parse file', () => {
     assert.deepEqual(postKeys, expextedKeys, 'values in post')
   })
 
-  it('Tested parsed JS file', () => {
+  it('parsed JS file', () => {
     const keys = ss[1].Keys
     const entityKeys = ['post']
 
@@ -151,7 +151,9 @@ describe('schemas - parse file', () => {
 
     // assert field default
     assert.ok(!postModel.title.default, 'default of title')
-    assert.equal(postModel.complexKey2.default, 'a', 'default of complexKey2')
+    assert.equal(
+      postModel.complexKey2.default, 'ckey2', 'default of complexKey2'
+    )
 
     const childSchema = postModel.complexKey
     const childModel = childSchema.model
@@ -180,14 +182,14 @@ describe('schemas - parse file', () => {
 
     // assert child field default
     assert.ok(!childModel.key1.default, 'default of child key1')
-    assert.equal(childModel.key2.default, 'key22', 'default of child key2')
+    assert.equal(childModel.key2.default, 'ckey12', 'default of child key2')
 
     // assert child field size
     assert.ok(!childModel.key1.size, 'require of child size')
     assert.equal(childModel.key2.size, 30, 'require of child size')
   })
 
-  it('Tested parsed SJS file', () => {
+  it('parsed SJS file', () => {
     const keys = ss[2].Keys
     const entityKeys = ['post']
 
@@ -241,7 +243,7 @@ describe('schemas - parse files', () => {
       catch((err) => done(err))
   })
 
-  it('Test all entities in schemas', () => {
+  it('all entities in schemas', () => {
     const keys = ss.Keys
     const entityKeys = ['category', 'customer', 'post', 'team', 'user']
 
@@ -249,7 +251,7 @@ describe('schemas - parse files', () => {
     assert.deepEqual(keys.sort(), entityKeys, 'values in objects')
   })
 
-  it('Test post entity in schemas', () => {
+  it('post entity in schemas', () => {
     const post = ss.getSchema('post')
     const postModel = Schemas.getModel(post)
     const postKeys = Object.keys(postModel)
@@ -279,7 +281,7 @@ describe('schemas - parse files', () => {
     assert.deepEqual(postKeys, expextedKeys, 'values in post')
   })
 
-  it('Test user entity in schemas', () => {
+  it('user entity in schemas', () => {
     const user = ss.getSchema('user')
     const userModel = Schemas.getModel(user)
     const userKeys = Object.keys(userModel)
@@ -304,7 +306,7 @@ describe('schemas - parse files', () => {
     assert.deepEqual(userKeys, expextedKeys, 'values in user')
   })
 
-  it('Test team entity in schemas', () => {
+  it('team entity in schemas', () => {
     const team = ss.getSchema('team')
     const teamModel = Schemas.getModel(team)
     const teamKeys = Object.keys(teamModel)
@@ -325,7 +327,7 @@ describe('schemas - parse files', () => {
     assert.deepEqual(teamKeys, expextedKeys, 'values in team')
   })
 
-  it('Test category entity in schemas', () => {
+  it('category entity in schemas', () => {
     const category = ss.getSchema('category')
     const categoryModel = Schemas.getModel(category)
     const categoryKeys = Object.keys(categoryModel)
@@ -346,7 +348,7 @@ describe('schemas - parse files', () => {
     assert.deepEqual(categoryKeys, expextedKeys, 'values in category')
   })
 
-  it('Test customer entity in schemas', () => {
+  it('customer entity in schemas', () => {
     const customer = ss.getSchema('customer')
     const customerModel = Schemas.getModel(customer)
     const customerKeys = Object.keys(customerModel)
