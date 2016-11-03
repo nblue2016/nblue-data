@@ -191,6 +191,30 @@ describe('adapter - init ', () => {
           catch((err) => done(err))
       })
 
+      it('create post and change values', function (done) {
+        this.timeout(timeoutValue)
+
+        co(function *() {
+          const post = yield postAdapter.create(
+              { title: originalTitle }
+            )
+
+          assert.equal(post.title, originalTitle, 'post.title')
+
+          // change title
+          post.title = changedTitle
+
+          // save changes
+          const post2 = yield post.save()
+
+          // console.log(post2.toObject())
+
+          assert.equal(post2.title, changedTitle, 'post2.title')
+        }).
+        then(() => done()).
+        catch((err) => done(err))
+      })
+
       it('retrieve and update post with promise', function (done) {
         this.timeout(timeoutValue * 3)
 

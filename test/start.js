@@ -1,10 +1,10 @@
 // define test script files
 const testScripts = [
-  '#./schema',
-  '#./connections',
+  './schema',
+  './connections',
   './adapter/crud',
   './adapter/orm-crud',
-  '#./adapter/other',
+  './adapter/other',
   '#./adapter/validator'
 ]
 
