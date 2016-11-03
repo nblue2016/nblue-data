@@ -48,7 +48,7 @@ describe('orm - init ', () => {
 
   it('ok', () => null)
 
-  it('sqlite - create single', function (done) {
+  it('adapter - create single', function (done) {
     this.timeout(timeoutValue)
 
     const post = {
@@ -70,6 +70,14 @@ describe('orm - init ', () => {
         return data
       }).
       then((data) => {
+        const obj = data.toObject()
+        const keys = Object.keys(obj)
+
+        assert.equal(keys.length, 17, 'keys of object')
+
+        return data
+      }).
+      then((data) => {
         data.title = 'title2'
 
         return data.save()
@@ -81,7 +89,7 @@ describe('orm - init ', () => {
       catch((err) => done(err))
   })
 
-  it('sqlite - create many', function (done) {
+  it('adapter - create many', function (done) {
     this.timeout(timeoutValue)
 
     const posts = [{ title: 'title1' }, { title: 'title2' }]
@@ -107,7 +115,7 @@ describe('orm - init ', () => {
       catch((err) => done(err))
   })
 
-  it('sqlite - retrieve', function (done) {
+  it('adapter - retrieve', function (done) {
     this.timeout(timeoutValue)
 
     const filter = { title: 'title1' }
@@ -127,7 +135,7 @@ describe('orm - init ', () => {
       catch((err) => done(err))
   })
 
-  it('sqlite - count', function (done) {
+  it('adapter - count', function (done) {
     this.timeout(timeoutValue)
 
     const posts = [
@@ -142,12 +150,45 @@ describe('orm - init ', () => {
     postAdapter.
       delete({}).
       then((data) => {
-        assert.equal(data.length, 3, 'remove old data')
+        assert.equal(data.ok, 1, 'correct result')
+        assert.equal(data.n, 3, 'remove old data')
       }).
       then(() => postAdapter.create(posts)).
       then(() => postAdapter.count(filter)).
       then((data) => {
         assert.equal(data, 5, 'count of matched posts')
+      }).
+      then(() => done()).
+      catch((err) => done(err))
+  })
+
+  it('adapter - update', function (done) {
+    this.timeout(timeoutValue)
+
+    const filter = { title: 'test data' }
+    const modifier = { title: 'changed data' }
+
+    postAdapter.
+      update(filter, modifier).
+      then((data) => {
+        assert.equal(data.ok, 1, 'correct result')
+        assert.equal(data.n, 5, 'count of matched data')
+        assert.equal(data.nModified, 5, 'count of modified data')
+      }).
+      then(() => done()).
+      catch((err) => done(err))
+  })
+
+  it('adapter - delete', function (done) {
+    this.timeout(timeoutValue)
+
+    const filter = { title: 'changed data' }
+
+    postAdapter.
+      delete(filter).
+      then((data) => {
+        assert.equal(data.ok, 1, 'correct result')
+        assert.equal(data.n, 5, 'count of matched data')
       }).
       then(() => done()).
       catch((err) => done(err))

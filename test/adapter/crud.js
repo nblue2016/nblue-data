@@ -77,7 +77,7 @@ describe('adapter - init ', () => {
           _del: (cx) => cx.adapter.delete({ _id: cx.post._id }),
           _end: conns.close('conn1')
         }, ctx).
-        then((data) => done()).
+        then(() => done()).
         catch((err) => done(err))
       })
 
@@ -98,6 +98,14 @@ describe('adapter - init ', () => {
             title: 'test',
             key: 'test key'
           })
+
+          assert.equal(post.title, 'test', 'post.title')
+          assert.equal(post.key, 'test key', 'post.key')
+
+          if (!post.toObject) {
+            console.log('ok')
+            // console.log(post.toObject())
+          }
 
           yield adapter.delete({ _id: post._id })
 
@@ -458,6 +466,15 @@ describe('adapter - init ', () => {
               pageSize: 5,
               page: 3
             })
+
+          users = users.map((user) => {
+            if (user.toObject &&
+              typeof user.toObject === 'function') {
+              return user.toObject()
+            }
+
+            return user
+          })
 
           assert.equal(
             users.length, 2, 'the count of matched users by complex filter.'

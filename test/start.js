@@ -2,7 +2,7 @@
 const testScripts = [
   '#./schema',
   '#./connections',
-  '#./adapter/crud',
+  './adapter/crud',
   './adapter/orm-crud',
   '#./adapter/other',
   '#./adapter/validator'
