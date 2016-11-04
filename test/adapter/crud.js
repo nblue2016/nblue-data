@@ -102,11 +102,6 @@ describe('adapter - init ', () => {
           assert.equal(post.title, 'test', 'post.title')
           assert.equal(post.key, 'test key', 'post.key')
 
-          if (!post.toObject) {
-            console.log('ok')
-            // console.log(post.toObject())
-          }
-
           yield adapter.delete({ _id: post._id })
 
           return conns.close('conn1')
@@ -198,6 +193,7 @@ describe('adapter - init ', () => {
           const post = yield postAdapter.create(
               { title: originalTitle }
             )
+          const id = post._id
 
           assert.equal(post.title, originalTitle, 'post.title')
 
@@ -207,9 +203,16 @@ describe('adapter - init ', () => {
           // save changes
           const post2 = yield post.save()
 
-          // console.log(post2.toObject())
-
           assert.equal(post2.title, changedTitle, 'post2.title')
+
+          const removed = yield post2.remove()
+
+          assert.ok(removed, 'removed')
+
+          const rt = yield postAdapter.retrieve({ _id: id })
+
+          assert.ok(Array.isArray(rt), 'after remove')
+          assert.equal(rt.length, 0, 'no matched')
         }).
         then(() => done()).
         catch((err) => done(err))

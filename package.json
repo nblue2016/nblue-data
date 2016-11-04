@@ -34,7 +34,7 @@
   "dependencies": {
     "mongodb": "^2.1.18",
     "mongoose": "^4.4.17",
-    "nblue": "^0.0.16"
+    "nblue": "^0.0.18"
   },
   "devDependencies": {
     "eslint": "^2.10.1",

@@ -5,7 +5,7 @@ const testScripts = [
   './adapter/crud',
   './adapter/orm-crud',
   './adapter/other',
-  '#./adapter/validator'
+  './adapter/validator'
 ]
 
 describe('init envirnment', () => {
