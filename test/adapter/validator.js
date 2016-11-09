@@ -15,15 +15,15 @@ const validatorError = new Error('validator failed')
 const catchError = (err, name, done) => {
   if (err instanceof ValidatorError &&
       err.Properties.has(name)) {
-    return done ? done() : null
+    return
   }
 
-  return done ? done(err) : null
+  throw err
 }
 
 const envs = ['dev', 'debug', 'qa']
 
-describe('other - init ', () => {
+describe('validator', () => {
   let
     conns = null,
     postAdapter = null
@@ -58,88 +58,98 @@ describe('other - init ', () => {
     catch((err) => done(err))
   })
 
-  it('validator - model keys', (done) => {
+  it('model keys', (done) => {
     postAdapter.create({
       title: 'test',
       name: 'invalid'
     }).
-    then(() => done(validatorError)).
-    catch((err) => catchError(err, 'name', done))
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'name')).
+    then(() => done()).
+    catch((err) => done(err))
   })
 
-  it('validator - require key', (done) => {
+  it('require key', (done) => {
     postAdapter.
       create({
         viewCount: 20,
         likeCount: 20
       }).
-      then(() => done(validatorError)).
-      catch((err) => catchError(err, 'title', done))
+      then(() => Promise.reject(validatorError)).
+      catch((err) => catchError(err, 'title')).
+      then(() => done()).
+      catch((err) => done(err))
   })
 
-  it('validator - limit key', (done) => {
+  it('limit key', (done) => {
     postAdapter.create({
       title: 'test_title',
       key: 'test_key',
       viewCount: 20,
       likeCount: 20
     }).
-    then(() => done(validatorError)).
-    catch((err) => catchError(err, 'key', done))
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'key')).
+    then(() => done()).
+    catch((err) => done(err))
   })
 
-  it('validator - limit of range function', (done) => {
+  it('limit of range function', (done) => {
     postAdapter.create({
       title: 'test_title',
       viewCount: 50,
       likeCount: 20
     }).
-    then(() => done(validatorError)).
-    catch((err) => catchError(err, 'viewCount', done))
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'viewCount')).
+    then(() => done()).
+    catch((err) => done(err))
   })
 
-  it('validator - limit of email', (done) => {
+  it('limit of email', (done) => {
     postAdapter.create({
       title: 'test_title',
       email: 'aa2.abc.com',
       viewCount: 20,
       likeCount: 20
     }).
-    then(() => done(validatorError)).
-    catch((err) => catchError(err, 'email', done))
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'email')).
+    then(() => done()).
+    catch((err) => done(err))
   })
 
-  it('validator - size', (done) => {
+  it('size of string', (done) => {
     postAdapter.create({
       title: 'abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz',
       viewCount: 20,
       likeCount: 20
     }).
-    then(() => done(validatorError)).
-    catch((err) => catchError(err, 'title', done))
-  })
-
-  it('validator - invalid string type', (done) => {
-    postAdapter.create({
-      title: 3232,
-      status: 4
-    }).
-    then(() => done(validatorError)).
-    catch((err) => catchError(err, 'title', null)).
-    then(() => postAdapter.create({
-      title: 'test'
-    })).
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'title')).
     then(() => done()).
     catch((err) => done(err))
   })
 
-  it('validator - invalid number type', (done) => {
+  it('invalid string type', (done) => {
+    postAdapter.create({
+      title: 3232,
+      status: 4
+    }).
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'title')).
+    then(() => postAdapter.create({ title: 'test' })).
+    then(() => done()).
+    catch((err) => done(err))
+  })
+
+  it('invalid number type', (done) => {
     postAdapter.create({
       title: 'test',
       status: 'unknown'
     }).
-    then((data) => done(validatorError)).
-    catch((err) => catchError(err, 'status', null)).
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'status')).
     then(() => postAdapter.create({
       title: 'test',
       status: 2
@@ -148,13 +158,13 @@ describe('other - init ', () => {
     catch((err) => done(err))
   })
 
-  it('validator - invalid date type', (done) => {
+  it('invalid date type', (done) => {
     postAdapter.create({
       title: 'test',
       publishedOn: 'unknown'
     }).
-    then((data) => done(validatorError)).
-    catch((err) => catchError(err, 'publishedOn', null)).
+    then(() => Promise.reject(validatorError)).
+    catch((err) => catchError(err, 'publishedOn')).
     then(() => postAdapter.create({
       title: 'test',
       publishedOn: new Date()
@@ -163,15 +173,15 @@ describe('other - init ', () => {
     catch((err) => done(err))
   })
 
-  it('validator - invalid string type in complex properties', (done) => {
+  it('invalid string type in complex properties', (done) => {
     postAdapter.
       create({
         title: 'test_title',
         complexKey: { title: 1232 },
         status: 4
       }).
-      then(() => done(validatorError)).
-      catch((err) => catchError(err, 'complexKey.title', null)).
+      then(() => Promise.reject(validatorError)).
+      catch((err) => catchError(err, 'complexKey.title')).
       then(() => postAdapter.create({
         title: 'test_title',
         complexKey: { key1: 'sub_test_key' },
