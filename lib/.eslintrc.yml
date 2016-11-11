@@ -5,3 +5,4 @@
     no-eval: 0
     no-unused-vars: 0
     id-length: [0, { min: 1 }]
+    global-require: 0
