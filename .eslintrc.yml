@@ -79,7 +79,7 @@
     no-labels: 2 # edisallow labeled statements
     no-lone-blocks: 2 # edisallow unnecessary nested blocks
     no-loop-func: 2 # edisallow function declarations and expressions inside loop statements
-    no-magic-numbers: [2, { ignore: [0, 1],ignoreArrayIndexes: true }] # edisallow magic numbers
+    no-magic-numbers: [2, { ignore: [0, 1, -1],ignoreArrayIndexes: true }] # edisallow magic numbers
     no-multi-spaces: 2 # edisallow multiple spaces
     no-multi-str: 2 # edisallow multiline strings
     no-native-reassign: 2 # edisallow reassigning native objects
