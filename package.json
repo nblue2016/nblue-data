@@ -1,6 +1,6 @@
 {
   "name": "nblue-data",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "data module",
   "main": "index.js",
   "directories": {
