@@ -28,8 +28,7 @@ describe('schemas - parse file', () => {
     assert.equal(keys.length, entityKeys.length, 'length of objects')
     assert.deepEqual(keys, entityKeys, 'values in objects')
 
-    const post = ss[0].getSchema('post')
-    const postModel = Schemas.getModel(post)
+    const postModel = ss[0].Model('post')
     const postKeys = Object.keys(postModel)
     const expextedKeys = [
       'title',
@@ -55,8 +54,7 @@ describe('schemas - parse file', () => {
     assert.equal(keys.length, entityKeys.length, 'length of objects')
     assert.deepEqual(keys, entityKeys, 'values in objects')
 
-    const post = ss[1].getSchema('post')
-    const postModel = Schemas.getModel(post)
+    const postModel = ss[1].Model('post')
     const postKeys = Object.keys(postModel)
     const expextedKeys = [
       'title',
@@ -100,7 +98,6 @@ describe('schemas - parse file', () => {
     assert.ok(!postModel.viewCount.isArray, 'array of viewCount')
     assert.ok(!postModel.likeCount.isArray, 'array of likeCount')
     assert.ok(!postModel.CanComment.isArray, 'array of CanComment')
-
 
     // assert field type
     assert.equal(postModel.title.type, 'string', 'type of title')
@@ -196,8 +193,7 @@ describe('schemas - parse file', () => {
     assert.equal(keys.length, entityKeys.length, 'length of objects')
     assert.deepEqual(keys, entityKeys, 'values in objects')
 
-    const post = ss[2].getSchema('post')
-    const postModel = Schemas.getModel(post)
+    const postModel = ss[2].Model('post')
     const postKeys = Object.keys(postModel)
     const expextedKeys = [
       'title',
@@ -252,8 +248,8 @@ describe('schemas - parse files', () => {
   })
 
   it('post entity in schemas', () => {
-    const post = ss.getSchema('post')
-    const postModel = Schemas.getModel(post)
+    const post = ss.Schema('post')
+    const postModel = ss.Model('post')
     const postKeys = Object.keys(postModel)
     const expextedKeys = [
       'title',
@@ -282,8 +278,8 @@ describe('schemas - parse files', () => {
   })
 
   it('user entity in schemas', () => {
-    const user = ss.getSchema('user')
-    const userModel = Schemas.getModel(user)
+    const user = ss.Schema('user')
+    const userModel = ss.Model('user')
     const userKeys = Object.keys(userModel)
     const expextedKeys = [
       'userToken',
@@ -307,8 +303,8 @@ describe('schemas - parse files', () => {
   })
 
   it('team entity in schemas', () => {
-    const team = ss.getSchema('team')
-    const teamModel = Schemas.getModel(team)
+    const team = ss.Schema('team')
+    const teamModel = ss.Model('team')
     const teamKeys = Object.keys(teamModel)
     const expextedKeys = [
       'nick',
@@ -328,8 +324,8 @@ describe('schemas - parse files', () => {
   })
 
   it('category entity in schemas', () => {
-    const category = ss.getSchema('category')
-    const categoryModel = Schemas.getModel(category)
+    const category = ss.Schema('category')
+    const categoryModel = ss.Model('category')
     const categoryKeys = Object.keys(categoryModel)
     const expextedKeys = [
       'CategoryID',
@@ -349,8 +345,8 @@ describe('schemas - parse files', () => {
   })
 
   it('customer entity in schemas', () => {
-    const customer = ss.getSchema('customer')
-    const customerModel = Schemas.getModel(customer)
+    const customer = ss.Schema('customer')
+    const customerModel = ss.Model('customer')
     const customerKeys = Object.keys(customerModel)
     const expextedKeys = [
       'City',

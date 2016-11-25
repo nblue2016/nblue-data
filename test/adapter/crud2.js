@@ -48,7 +48,7 @@ describe('adapter - open/close', () => {
     co(function *() {
       // open all database
       const conn = conns.getConnectionByEntity('user')
-      const schema = conns.Schemas.getSchema('user')
+      const schema = conns.Schemas.Schema('user')
 
       yield conn.open()
 
