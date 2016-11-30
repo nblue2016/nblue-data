@@ -1,6 +1,6 @@
 {
   "name": "nblue-data",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "data module",
   "main": "index.js",
   "directories": {
@@ -34,10 +34,10 @@
   "dependencies": {
     "mongodb": "^2.1.18",
     "mongoose": "^4.4.17",
-    "nblue": "0.0.31"
+    "nblue": "0.0.35"
   },
   "devDependencies": {
     "eslint": "^2.10.1",
-    "mocha": "^2.4.5"
+    "mocha": "^3.2.0"
   }
 }
