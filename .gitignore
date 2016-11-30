@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+test/data/nblue.sqlite
 
 # Runtime data
 pids
