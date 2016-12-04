@@ -1,13 +1,14 @@
 {
   "name": "nblue-data",
   "description": "data module",
+  "version": "0.0.33",
   "main": "index.js",
   "directories": {
     "doc": "doc",
     "test": "test"
   },
   "scripts": {
-    "test": "mocha ./test/start.js"
+    "test": "mocha ./test/start.js --timeout 8000"
   },
   "repository": {
     "type": "git",
@@ -33,11 +34,12 @@
   "dependencies": {
     "mongodb": "^2.2.12",
     "mongoose": "^4.4.17",
-    "nblue": "0.0.36"
+    "nblue": "0.0.37",
+    "orm": "^3.1.0",
+    "sqlite3": "^3.1.8"
   },
   "devDependencies": {
     "eslint": "^3.11.1",
     "mocha": "^3.2.0"
-  },
-  "version": "0.0.32"
+  }
 }

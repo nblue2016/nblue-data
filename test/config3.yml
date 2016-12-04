@@ -1,6 +1,7 @@
 ---
 connections:
   - conn1: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
+#  - conn1: "mongodb://nblue:password@ds021671.mlab.com:21671/nblue?authDb=nblue"
   - conn2: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
   - conn3: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
 env: qa

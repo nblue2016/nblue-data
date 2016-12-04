@@ -17,9 +17,8 @@ describe('connections - init', () => {
       parseConfig(configFile, envs).
       then((data) => {
         config = data
-
-        done()
       }).
+      then(() => done()).
       catch((err) => done(err))
   })
 
@@ -36,9 +35,7 @@ describe('connections - init', () => {
 
     describe(`connections - create methods (${proxyName})`, () => {
       it(`method of create by promise`,
-        function (done) {
-          this.timeout(2000)
-
+        (done) => {
           const conns = new DbConnections()
           const cs = config.getConnectionString('conn1')
 
@@ -76,9 +73,7 @@ describe('connections - init', () => {
         })
 
       it(`method of create by callback`,
-        function (done) {
-          this.timeout(2000)
-
+        (done) => {
           const conns = new DbConnections()
           const cs = config.getConnectionString('conn1')
 
@@ -97,9 +92,7 @@ describe('connections - init', () => {
         })
 
       it(`method of create handle event`,
-        function (done) {
-          this.timeout(2000)
-
+        (done) => {
           const conns = new DbConnections()
           const cs = config.getConnectionString('conn1')
           let opened = false
@@ -125,9 +118,7 @@ describe('connections - init', () => {
         })
 
       it(`method of createByConfig by promise`,
-        function (done) {
-          this.timeout(2000)
-
+        (done) => {
           const conns = new DbConnections()
           const conn = conns.createByConfig('conn1', config)
 
@@ -141,9 +132,7 @@ describe('connections - init', () => {
         })
 
       it(`method of createByConfig by callback`,
-        function (done) {
-          this.timeout(2000)
-
+        (done) => {
           const conns = new DbConnections()
           const conn = conns.createByConfig('conn1', config)
 
@@ -161,9 +150,7 @@ describe('connections - init', () => {
         })
 
       it(`method of createByConfigs then open with error`,
-        function (done) {
-          this.timeout(2000)
-
+        (done) => {
           const conns = new DbConnections()
 
           conns.createByConfigs(config)

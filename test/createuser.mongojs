@@ -1,4 +1,4 @@
-db.creatUser([
+db.createUser([
   {
     user: 'admin',
     pwd: 'password',
