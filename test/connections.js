@@ -1,5 +1,5 @@
 const assert = require('assert')
-const nblue = require('nblue')
+const nblue = require('nblue-core')
 const ndata = require('../lib')
 
 const ConfigMap = nblue.ConfigMap

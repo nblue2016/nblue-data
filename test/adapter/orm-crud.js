@@ -1,6 +1,6 @@
 const assert = require('assert')
 const path = require('path')
-const nblue = require('nblue')
+const nblue = require('nblue-core')
 const ndata = require('../../lib')
 
 const aq = nblue.aq
