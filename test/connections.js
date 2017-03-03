@@ -242,8 +242,13 @@ describe('connections - init', () => {
         conns.registerProxy('mongodb:', proxies[index])
         conns.createByConfigs(config)
 
-        assert.ok(conns.getPackages(), 'packages')
-        assert.ok(conns.getPackages(config), 'packages')
+        console.log(DbConnections.getDefaultProxies())
+
+        assert.ok(
+          DbConnections.getPackages({ proxy: conns.proxies }),
+          'packages'
+        )
+        assert.ok(DbConnections.getPackages({ config }), 'packages')
       })
     })
   })
