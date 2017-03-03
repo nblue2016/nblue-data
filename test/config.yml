@@ -1,9 +1,12 @@
 ---
 $$version:  "1.0.1"
-connections:
-  - conn1: "mongodb://user:pass@host:port/db?authDb=dbname"
-  - conn2: "mongodb://user:pass@host:port/db?authDb=dbname"
-  - conn3: "mongodb://user:pass@host:port/db?authDb=dbname"
-  - conn4: "mongodb://user:pass@host2:port/db?authDb=dbname"
-  - conn5: "mongodb://user:incorrectPass@host2:port/db?authDb=dbname"
+database:
+  connections:
+    conn1: mongodb://user:pass@host:port/db?authDb=dbname
+    conn2: mongodb://user:pass@host:port/db?authDb=dbname
+    conn3: mongodb://user:pass@host:port/db?authDb=dbname
+    conn4: mongodb://user:pass@host2:port/db?authDb=dbname
+    conn5: mongodb://user:incorrectPass@host2:port/db?authDb=dbname
+    rabbit: amqp://localhost
+  proxies:
 env: debug

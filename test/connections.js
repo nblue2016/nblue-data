@@ -7,6 +7,11 @@ const DbConnections = ndata.DbConnections
 
 const envs = ['dev', 'debug', 'qa']
 
+/* const InstallPackages = [
+  ['mongodb', 'mysql', 'sqlite3', 'orm2'],
+  ['mongodb', 'mysql', 'sqlite3', 'mongoose', 'orm2']
+] */
+
 describe('connections - init', () => {
   let config = null
 
@@ -37,7 +42,7 @@ describe('connections - init', () => {
       it(`method of create by promise`,
         (done) => {
           const conns = new DbConnections()
-          const cs = config.getConnectionString('conn1')
+          const cs = conns.getConnectionStringFromConfig(config, 'conn1')
 
           conns.registerProxy('mongodb:', proxies[index])
           conns.create('test', cs)
@@ -75,11 +80,11 @@ describe('connections - init', () => {
       it(`method of create by callback`,
         (done) => {
           const conns = new DbConnections()
-          const cs = config.getConnectionString('conn1')
+          const cs = conns.getConnectionStringFromConfig(config, 'conn1')
 
           conns.create('test', cs)
 
-          conns.registerProxy('mongodb:', proxies[index])
+          conns.registerProxy('mongodb', proxies[index])
           conns.open('test', (err) => {
             if (err) done(err)
             else {
@@ -94,7 +99,7 @@ describe('connections - init', () => {
       it(`method of create handle event`,
         (done) => {
           const conns = new DbConnections()
-          const cs = config.getConnectionString('conn1')
+          const cs = conns.getConnectionStringFromConfig(config, 'conn1')
           let opened = false
 
           conns.create('test', cs)
@@ -120,7 +125,7 @@ describe('connections - init', () => {
       it(`method of createByConfig by promise`,
         (done) => {
           const conns = new DbConnections()
-          const conn = conns.createByConfig('conn1', config)
+          const conn = conns.createByConfig(config, 'conn1')
 
           conns.registerProxy('mongodb:', proxies[index])
 
@@ -134,7 +139,7 @@ describe('connections - init', () => {
       it(`method of createByConfig by callback`,
         (done) => {
           const conns = new DbConnections()
-          const conn = conns.createByConfig('conn1', config)
+          const conn = conns.createByConfig(config, 'conn1')
 
           conns.registerProxy('mongodb:', proxies[index])
 
@@ -210,6 +215,36 @@ describe('connections - init', () => {
             catch((err) => done(err)).
             finally(() => console.log(' '))
         })
+
+      it('method of support and supportProtocol', () => {
+        const conns = new DbConnections()
+
+        conns.createByConfigs(config)
+
+        assert.ok(conns.supportProtocol('mongodb'), 'mongodb')
+        assert.ok(conns.supportProtocol('sqlite'), 'sqlite')
+        assert.ok(conns.supportProtocol('mysql'), 'mysql')
+        assert.ok(!conns.supportProtocol('amqp'), 'rabit')
+
+        assert.ok(
+          conns.support(
+            'mongodb://user:password@localhost:27017/db?authDb=nblue'
+          ), 'mongodb'
+        )
+        assert.ok(conns.support('sqlite://data/nblue.sqlite'), 'sqlite')
+        assert.ok(conns.support('mysql://user:password@localhost/db'), 'mysql')
+        assert.ok(!conns.support('amqp://localhost'), 'rabit')
+      })
+
+      it('method of getPackages', () => {
+        const conns = new DbConnections()
+
+        conns.registerProxy('mongodb:', proxies[index])
+        conns.createByConfigs(config)
+
+        assert.ok(conns.getPackages(), 'packages')
+        assert.ok(conns.getPackages(config), 'packages')
+      })
     })
   })
 })
@@ -232,7 +267,7 @@ describe('connections - orm', () => {
 
   it('Test method of create by promise (ORM2 Driver)', (done) => {
     const conns = new DbConnections()
-    const cs = config.getConnectionString('conn1')
+    const cs = conns.getConnectionStringFromConfig(config, 'conn1')
 
     conns.create('test', cs)
 

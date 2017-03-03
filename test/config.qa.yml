@@ -1,11 +1,12 @@
 ---
-connections:
-  - conn1: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
-  - conn2: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
-  - conn3: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
-  - conn4: "mongodb://admin:password@localhost:27017/admin"
-#  - conn5: "mongodb://admin:password@localhost:27017/admin"
-  - conn5: "mongodb://nblue:incorrectPassword@127.0.0.1:27017/nblue?authDb=nblue"
+database:
+  connections:
+    conn1: mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue
+    conn2: mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue
+    conn3: mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue
+    conn4: mongodb://admin:password@localhost:27017/admin
+    # conn5: mongodb://admin:password@localhost:27017/admin
+    conn5: mongodb://nblue:incorrectPassword@127.0.0.1:27017/nblue?authDb=nblue
 env: qa
 err:
-  - conn5: "mongodb://nblue:incorrectPassword@127.0.0.1:27017/nblue?authDb=nblue"
+    conn5: mongodb://nblue:incorrectPassword@127.0.0.1:27017/nblue?authDb=nblue

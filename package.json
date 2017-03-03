@@ -1,7 +1,7 @@
 {
   "name": "nblue-data",
-  "description": "data module",
-  "version": "0.0.35",
+  "description": "nblue framework data module",
+  "version": "0.0.37",
   "main": "index.js",
   "directories": {
     "doc": "doc",
@@ -34,7 +34,7 @@
   "dependencies": {
     "mongodb": "^2.2.12",
     "mongoose": "^4.4.17",
-    "nblue-core": "0.0.50",
+    "nblue-core": "0.0.59",
     "orm": "^3.1.0",
     "sqlite3": "^3.1.8"
   },

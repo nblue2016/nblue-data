@@ -1,7 +1,8 @@
 ---
 $$version:  "1.0.1"
-connections:
-  - conn1: "sqlite://test/data/nblue.sqlite"
-  - conn2: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
-  - conn3: "mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue"
+database:
+  connections:
+    conn1: sqlite://test/data/nblue.sqlite
+    conn2: mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue
+    conn3: mongodb://nblue:password@127.0.0.1:27017/nblue?authDb=nblue
 env: debug
