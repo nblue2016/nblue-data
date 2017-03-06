@@ -1,11 +1,11 @@
 const assert = require('assert')
 const path = require('path')
-const nblue = require('nblue-core')
+const core = require('nblue-core')
 const ndata = require('../../lib')
 
-const betch = nblue.betch
+const betch = core.betch
 
-const ConfigMap = nblue.ConfigMap
+const ConfigMap = core.ConfigMap
 const Schemas = ndata.Schemas
 const DbConnections = ndata.DbConnections
 

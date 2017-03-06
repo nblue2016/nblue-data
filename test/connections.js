@@ -1,8 +1,8 @@
 const assert = require('assert')
-const nblue = require('nblue-core')
+const core = require('nblue-core')
 const ndata = require('../lib')
 
-const ConfigMap = nblue.ConfigMap
+const ConfigMap = core.ConfigMap
 const DbConnections = ndata.DbConnections
 
 const envs = ['dev', 'debug', 'qa']
@@ -59,7 +59,7 @@ describe('connections - init', () => {
 
               assert.ok(conn, 'get connection')
               assert.ok(conn.IsOpened, 'connection was opend')
-              assert.ok(conn.Instance, 'connection was created')
+              assert.ok(conn.Native, 'native connection was created')
               assert.equal(conn.Name, 'test', 'get connection name')
 
               return conns.close('test')
@@ -69,7 +69,7 @@ describe('connections - init', () => {
 
               assert.ok(conn, 'get connection')
               assert.ok(!conn.IsOpened, 'connection was closed')
-              assert.ok(!conn.Instance, 'connection was released')
+              assert.ok(!conn.Native, 'native connection was released')
               assert.equal(conn.Name, 'test', 'get connection name')
 
               done()

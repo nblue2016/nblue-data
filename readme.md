@@ -7,3 +7,9 @@ You can use npm to install nblue-data
 ```
 npm install nblue-data
 ```
+
+you need apply following commands before run test
+``` shell
+npm install mongodb mongoose sqlite orm
+npm test
+```
