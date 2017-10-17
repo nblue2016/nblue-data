@@ -16,5 +16,14 @@ db.createUser([
         { role: 'userAdmin', db: 'nblue' },
         { role: 'dbAdmin', db: 'nblue' }
     ]
+  },
+  {
+    user: 'oauth',
+    pwd: 'password',
+    roles:[
+        { role: 'readWrite', db: 'oauth' },
+        { role: 'userAdmin', db: 'oauth' },
+        { role: 'dbAdmin', db: 'oauth' }
+    ]
   }
 ])
