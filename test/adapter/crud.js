@@ -42,11 +42,11 @@ describe('adapter - init ', () => {
         schemaFiles.map((file) => path.join(__dirname, '../', 'schemas', file))
       )
     ]).
-    then((data) => {
-      [config, schemas] = data
-    }).
-    then(() => done()).
-    catch((err) => done(err))
+      then((data) => {
+        [config, schemas] = data
+      }).
+      then(() => done()).
+      catch((err) => done(err))
   })
 
   it('ok', () => null)
@@ -77,8 +77,8 @@ describe('adapter - init ', () => {
           _del: (cx) => cx.adapter.delete({ _id: cx.post._id }),
           _end: conns.close('conn1')
         }, ctx).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it(`create adpater with co`, function (done) {
@@ -146,8 +146,8 @@ describe('adapter - init ', () => {
             userAdapter.delete({})
           ])
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('ready', () => null)
@@ -191,8 +191,9 @@ describe('adapter - init ', () => {
 
         co(function *() {
           const post = yield postAdapter.create(
-              { title: originalTitle }
-            )
+            { title: originalTitle }
+          )
+
           const id = post._id
 
           assert.equal(post.title, originalTitle, 'post.title')
@@ -214,8 +215,8 @@ describe('adapter - init ', () => {
           assert.ok(Array.isArray(rt), 'after remove')
           assert.equal(rt.length, 0, 'no matched')
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('retrieve and update post with promise', function (done) {
@@ -253,8 +254,8 @@ describe('adapter - init ', () => {
           // check new value of title
           assert.equal(post.title, changedTitle, 'check changed title')
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('retrieve list posts with promise', function (done) {
@@ -278,8 +279,8 @@ describe('adapter - init ', () => {
             posts[1]._id.toString(), insertedPosts[1], 'compare the 2nd id'
           )
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('count of posts with promise', function (done) {
@@ -295,8 +296,8 @@ describe('adapter - init ', () => {
 
           assert.equal(count, insertedPosts.length, 'got count of posts is 2')
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('delete posts with promise', function (done) {
@@ -322,8 +323,8 @@ describe('adapter - init ', () => {
             results.length, insertedPosts.length, 'tow entites were deleted'
           )
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('create catagory with auto increment', function (done) {
@@ -377,8 +378,8 @@ describe('adapter - init ', () => {
             category.CategoryID, step * (times - 1), 'check the latest item'
           )
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('batch create users', (done) => {
@@ -389,8 +390,8 @@ describe('adapter - init ', () => {
           assert.equal(users.length, userData.length, 'created users.')
           assert.equal(count, userData.length, 'count of users.')
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('find one by filter for users', (done) => {
@@ -400,8 +401,8 @@ describe('adapter - init ', () => {
           assert.equal(Array.isArray(user), false, 'only found one element')
           assert.equal(user.nick, 'test01', 'only found one element')
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('complex filter for users', (done) => {
@@ -519,8 +520,8 @@ describe('adapter - init ', () => {
             'properties of the 1st user'
           )
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('batch modified users', (done) => {
@@ -540,8 +541,8 @@ describe('adapter - init ', () => {
 
           assert.equal(users.length, 9, '9 users were updated.')
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       it('batch delete users', (done) => {
@@ -551,16 +552,16 @@ describe('adapter - init ', () => {
           assert.equal(result.ok, 1, 'parse ok value')
           assert.equal(result.n, 3, 'parse n value')
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
 
       after((done) => {
         co(function *() {
           yield conns.closeAll()
         }).
-        then(() => done()).
-        catch((err) => done(err))
+          then(() => done()).
+          catch((err) => done(err))
       })
     })
   })

@@ -29,11 +29,11 @@ describe('adapter - open/close', () => {
         schemaFiles.map((file) => path.join(__dirname, '../', 'schemas', file))
       )
     ]).
-    then((data) => {
-      [config, schemas] = data
-    }).
-    then(() => done()).
-    catch((err) => done(err))
+      then((data) => {
+        [config, schemas] = data
+      }).
+      then(() => done()).
+      catch((err) => done(err))
   })
 
   it('ok', () => null)
@@ -92,7 +92,7 @@ describe('adapter - open/close', () => {
         yield conn.close()
       }
     }).
-    then(() => done()).
-    catch((err) => done(err))
+      then(() => done()).
+      catch((err) => done(err))
   })
 })

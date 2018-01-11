@@ -9,7 +9,8 @@
   },
   "scripts": {
     "show": "npm ls --depth=0",
-    "test": "mocha ./test/start.js --timeout 8000"
+    "test": "mocha ./test/start.js --timeout 8000",
+    "test-install": "npm i orm mongodb mongoose mysql sqlite --save-dev"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,11 @@
   },
   "devDependencies": {
     "eslint": "^3.11.1",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "mongodb": "^3.0.1",
+    "mongoose": "^4.13.9",
+    "mysql": "^2.15.0",
+    "orm": "^4.0.2",
+    "sqlite": "^2.9.0"
   }
 }

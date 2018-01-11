@@ -21,7 +21,7 @@ describe('orm - init ', () => {
 
 
   before((done) => {
-      // parse config and schema files
+    // parse config and schema files
     const configFile = String.format('%s/../config2.yml', __dirname)
     const schemaFile = 'blog.js'
 
@@ -29,21 +29,21 @@ describe('orm - init ', () => {
       ConfigMap.parseConfig(configFile, envs),
       Schemas.parse(path.join(__dirname, '../', 'schemas', schemaFile))
     ]).
-    then((data) => {
-      // [config, schemas] = data
-      conns = new DbConnections(data[1])
-      conns.createByConfigs(data[0])
+      then((data) => {
+        // [config, schemas] = data
+        conns = new DbConnections(data[1])
+        conns.createByConfigs(data[0])
 
-      return conns.openAll()
-    }).
-    then(() => conns.getAdapter('post')).
-    then((data) => {
-      postAdapter = data
+        return conns.openAll()
+      }).
+      then(() => conns.getAdapter('post')).
+      then((data) => {
+        postAdapter = data
 
-      return postAdapter.delete({})
-    }).
-    then(() => done()).
-    catch((err) => done(err))
+        return postAdapter.delete({})
+      }).
+      then(() => done()).
+      catch((err) => done(err))
   })
 
   it('ok', () => null)
